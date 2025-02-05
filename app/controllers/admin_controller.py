@@ -226,12 +226,13 @@ class AdminController():
             cursor = conn.cursor()
             cursor.execute("""SELECT
                            m.nombre,
-                           m.ubicacion
+                           m.ubicacion,
+                           m.estilo
                            FROM modulo m
                            JOIN moduloxrol mxr ON m.id=mxr.id_modulo
                            JOIN roles r ON mxr.id_rol=r.id
-                           WHERE mxr.estado=%s AND r.id=%s
-                           """, (moduloxrol_can_see.id_rol))
+                           WHERE mxr.estado=1 AND r.id=%s
+                           """, (moduloxrol_can_see.id_rol,))
             result = cursor.fetchone()
             payload = []
             content = {}
@@ -239,6 +240,7 @@ class AdminController():
             content = {
                 'nombre': result[0],
                 'ubicacion': result[1],
+                'estilo': result[2],
             }
             payload.append(content)
 

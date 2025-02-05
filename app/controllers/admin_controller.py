@@ -233,15 +233,18 @@ class AdminController():
                            JOIN roles r ON mxr.id_rol=r.id
                            WHERE mxr.estado=1 AND r.id=%s
                            """, (moduloxrol_can_see.id_rol,))
-            result = cursor.fetchone()
+            result = cursor.fetchall()
             payload = []
             content = {}
-
-            content = {
-                'nombre': result[0],
-                'ubicacion': result[1],
-                'estilo': result[2],
+            
+            if result: 
+                for data in result:
+                    content = {
+                'nombre': data[0],
+                'ubicacion': data[1],
+                'estilo': data[2],
             }
+
             payload.append(content)
 
             json_data = jsonable_encoder(content)

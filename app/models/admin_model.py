@@ -24,6 +24,6 @@ class Actualizar_Estado_Modulo(BaseModel):
 
 class ModuloxRol(BaseModel):
     id: int = None
-    id_modulo: int
+    id_modulo: list
     id_rol: int
     estado: bool

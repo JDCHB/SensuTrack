@@ -28,3 +28,7 @@ class ModuloxRol(BaseModel):
     id_modulo: List[int]
     id_rol: int
     estado: bool
+
+
+class ModuloxRol_Can_See(BaseModel):
+    id_rol: int = None

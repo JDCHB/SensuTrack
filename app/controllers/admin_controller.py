@@ -1,7 +1,7 @@
 import mysql.connector
 from fastapi import HTTPException
 from app.config.db_config import get_db_connection
-from app.models.admin_model import NuevoCollar, NuevoModulo, Actualizar_Estado_Modulo, ModuloxRol
+from app.models.admin_model import *
 from fastapi.encoders import jsonable_encoder
 
 
@@ -217,6 +217,41 @@ class AdminController():
             conn.rollback()
         finally:
             conn.close()
+
+    def get_modulos_can_see(self, moduloxrol_can_see: ModuloxRol_Can_See):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""SELECT
+                           m.nombre,
+                           m.ubicacion
+                           FROM modulo m
+                           JOIN moduloxrol mxr ON m.id=mxr.id_modulo
+                           JOIN roles r ON mxr.id_rol=r.id
+                           WHERE mxr.estado=%s AND r.id=%s
+                           """, (moduloxrol_can_see.id_rol))
+            result = cursor.fetchone()
+            payload = []
+            content = {}
+
+            content = {
+                'nombre': result[0],
+                'ubicacion': result[1],
+            }
+            payload.append(content)
+
+            json_data = jsonable_encoder(content)
+            if result:
+                return json_data
+            else:
+                raise HTTPException(status_code=404, detail="Modulo not found")
+
+        except mysql.connector.Error as err:
+            conn.rollback()
+            return {"error": f"Database error: {err}"}
+        finally:
+            if conn:
+                conn.close()
 
     def get_moduloXrol(self, modulo_id: int):
         try:

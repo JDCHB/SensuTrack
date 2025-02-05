@@ -57,7 +57,7 @@ class Rolescontroller():
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM roles")
+            cursor.execute("SELECT * FROM roles WHERE id != 3")
             result = cursor.fetchall()
             payload = []
             content = {}

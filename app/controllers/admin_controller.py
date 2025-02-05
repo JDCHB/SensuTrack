@@ -170,7 +170,7 @@ class AdminController():
 
     # DESDE AQUI ES MODULOXROL
 
-    def create_moduloXrol(self, moduloxrol: ModuloxRol):
+    # def create_moduloXrol(self, moduloxrol: ModuloxRol):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
@@ -179,6 +179,40 @@ class AdminController():
             conn.commit()
             conn.close()
             return {"resultado": "ModuloXrol creado"}
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
+    def create_moduloXrol(self, moduloxrol: ModuloxRol):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            print("moduloxperfilssssssssssssssssssssssssssssss")
+            cursor.execute("SELECT id from modulo")
+            rv = cursor.fetchall()
+
+            print(moduloxrol)
+
+            for result in rv:
+                id_modulo_v = result[0]
+                print("-------------------------------------------1", result)
+                cursor.execute("INSERT INTO moduloxrol (id_rol,id_modulo,estado) VALUES (%s,%s,%s)", (
+                    moduloxrol.id_rol, id_modulo_v, 0,))
+                conn.commit()
+
+            for result in moduloxrol.id_modulo:
+                print("-------------------------------------------2", result)
+                cursor.execute("""
+                             UPDATE moduloxrol AS mx
+                            SET estado = 1
+                            WHERE id_rol = %s AND id_modulo=%s   
+                        """, (moduloxrol.id_rol, result))
+                conn.commit()
+            conn.close()
+            id = cursor.lastrowid
+            return {id}  # aja
+
         except mysql.connector.Error as err:
             conn.rollback()
         finally:

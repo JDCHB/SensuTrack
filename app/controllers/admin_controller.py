@@ -44,8 +44,8 @@ class AdminController():
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO modulo (nombre, descripcion, ubicacion, estado) VALUES (%s, %s, %s, %s)",
-                           (nuevomodulo.nombre, nuevomodulo.descripcion, nuevomodulo.ubicacion, nuevomodulo.estado))
+            cursor.execute("INSERT INTO modulo (nombre, descripcion, ubicacion, estado, estilo) VALUES (%s, %s, %s, %s, %s)",
+                           (nuevomodulo.nombre, nuevomodulo.descripcion, nuevomodulo.ubicacion, nuevomodulo.estado, nuevomodulo.estilo))
             conn.commit()
             conn.close()
             return {"resultado": "Modulo creado"}
@@ -70,7 +70,8 @@ class AdminController():
                 'nombre': result[1],
                 'descripcion': result[2],
                 'ubicacion': result[3],
-                'estado': bool(result[4])
+                'estado': bool(result[4]),
+                'estilo': result[5],
             }
             payload.append(content)
 
@@ -103,7 +104,8 @@ class AdminController():
                     'nombre': data[1],
                     'descripcion': data[2],
                     'ubicacion': data[3],
-                    'estado': bool(data[4])
+                    'estado': bool(data[4]),
+                    'estilo': data[5],
                 }
                 payload.append(content)
                 content = {}
@@ -125,9 +127,9 @@ class AdminController():
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(
-                "UPDATE modulo SET nombre = %s, descripcion = %s, ubicacion=%s, estado = %s WHERE id = %s",
+                "UPDATE modulo SET nombre = %s, descripcion = %s, ubicacion=%s, estado = %s, estilo = %s WHERE id = %s",
                 (nuevomodulo.nombre, nuevomodulo.descripcion,
-                 nuevomodulo.estado, modulo_id,)
+                 nuevomodulo.estado, nuevomodulo.estilo,  modulo_id,)
             )
             conn.commit()
 
@@ -171,18 +173,18 @@ class AdminController():
     # DESDE AQUI ES MODULOXROL
 
     # def create_moduloXrol(self, moduloxrol: ModuloxRol):
-        try:
-            conn = get_db_connection()
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO moduloxrol (id_modulo, id_rol, estado) VALUES(%s, %s, %s)",
-                           (moduloxrol.id_modulo, moduloxrol.id_rol, moduloxrol.estado))
-            conn.commit()
-            conn.close()
-            return {"resultado": "ModuloXrol creado"}
-        except mysql.connector.Error as err:
-            conn.rollback()
-        finally:
-            conn.close()
+        #try:
+         #   conn = get_db_connection()
+          #  cursor = conn.cursor()
+           # cursor.execute("INSERT INTO moduloxrol (id_modulo, id_rol, estado) VALUES(%s, %s, %s)",
+            #               (moduloxrol.id_modulo, moduloxrol.id_rol, moduloxrol.estado))
+        #    conn.commit()
+        #    conn.close()
+        #    return {"resultado": "ModuloXrol creado"}
+       # except mysql.connector.Error as err:
+       #     conn.rollback()
+       # finally:
+       #     conn.close()
 
     def create_moduloXrol(self, moduloxrol: ModuloxRol):
         try:

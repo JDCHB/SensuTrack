@@ -240,12 +240,12 @@ class AdminController():
             if result: 
                 for data in result:
                     content = {
-                'nombre': data[0],
-                'ubicacion': data[1],
-                'estilo': data[2],
-            }
+                    'nombre': data[0],
+                    'ubicacion': data[1],
+                    'estilo': data[2],
+                    }
+                    payload.append(content)            
 
-            payload.append(content)
 
             json_data = jsonable_encoder(content)
             if result:

@@ -237,28 +237,25 @@ class AdminController():
             payload = []
             content = {}
             
-            if result: 
-                for data in result:
-                    content = {
+            for data in result:
+                content = {
                     'nombre': data[0],
                     'ubicacion': data[1],
                     'estilo': data[2],
-                    }
-                    payload.append(content)            
-
-
-            json_data = jsonable_encoder(content)
+                }
+                payload.append(content)
+                content = {}
+            json_data = jsonable_encoder(payload)
             if result:
-                return json_data
+                return {"resultado": json_data}
             else:
-                raise HTTPException(status_code=404, detail="Modulo not found")
+                raise HTTPException(
+                    status_code=404, detail="Modulos not found")
 
         except mysql.connector.Error as err:
             conn.rollback()
-            return {"error": f"Database error: {err}"}
         finally:
-            if conn:
-                conn.close()
+            conn.close()
 
     def get_moduloXrol(self, modulo_id: int):
         try:

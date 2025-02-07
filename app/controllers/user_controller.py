@@ -37,7 +37,7 @@ class Usercontroller():
 
             if result:
                 # Generar token
-                access_token_expires = timedelta(minutes=5)
+                access_token_expires = timedelta(minutes=60)
                 access_token = self.create_access_token(
                     # Usa el email como "sub" en el token
                     data={"sub": result[1]},

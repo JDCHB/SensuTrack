@@ -28,7 +28,7 @@ class ModuloxRol(BaseModel):
     id: int = None
     id_modulo: List[int]
     id_rol: int
-    estado: bool
+    estado: bool = None
 
 
 class ModuloxRol_Can_See(BaseModel):

@@ -343,16 +343,17 @@ class AdminController():
             if conn:
                 conn.close()
 
-    def update_moduloXrol02(self, modulo_id: int, nuevomodulo: NuevoModulo):
+    def update_moduloXrol02(self, modulo_id: int, moduloxrol: ModuloxRol):
         try:
             conn = get_db_connection()
-            cursor = conn.cursor()
-            cursor.execute(
-                "UPDATE modulo SET nombre = %s, descripcion = %s, estado = 1 WHERE id = %s",
-                (nuevomodulo.nombre, nuevomodulo.descripcion,
-                  modulo_id,)
-            )
-            conn.commit()
+            for result in moduloxrol.id_modulo:
+                print("-------------------------------------------2", result)
+                cursor.execute("""
+                             UPDATE moduloxrol AS mx
+                            SET estado = 1
+                            WHERE id_rol = %s AND id_modulo=%s   
+                        """, (moduloxrol.id_rol, result))
+                conn.commit()
 
             if cursor.rowcount == 0:
                 raise HTTPException(

@@ -346,27 +346,41 @@ class AdminController():
     def update_moduloXrol02(self, modulo_id: int, moduloxrol: ModuloxRol):
         try:
             conn = get_db_connection()
+            cursor = conn.cursor()
+
+            # Primero, desactivar todos los módulos asociados al rol
+            cursor.execute("""
+                UPDATE moduloxrol 
+                SET estado = 0 
+                WHERE id_rol = %s
+            """, (moduloxrol.id_rol,))
+
+            # Luego, activar solo los módulos seleccionados
             for result in moduloxrol.id_modulo:
-                print("-------------------------------------------2", result)
                 cursor.execute("""
-                             UPDATE moduloxrol AS mx
-                            SET estado = 1
-                            WHERE id_rol = %s AND id_modulo=%s   
-                        """, (moduloxrol.id_rol, result))
-                conn.commit()
+                    UPDATE moduloxrol 
+                    SET estado = 1
+                    WHERE id_rol = %s AND id_modulo = %s
+                """, (moduloxrol.id_rol, result))
+
+            conn.commit()  # Un solo commit al final para optimizar
 
             if cursor.rowcount == 0:
                 raise HTTPException(
-                    status_code=404, detail="Modulo no encontrado")
+                    status_code=404, detail="Módulo no encontrado")
 
-            return {"mensaje": "Modulo actualizado exitosamente"}
+            return {"mensaje": "Módulos actualizados exitosamente"}
 
         except mysql.connector.Error as err:
+            conn.rollback()  # Deshacer cambios si hay error
             raise HTTPException(status_code=500, detail=str(err))
 
         finally:
+            if cursor:
+                cursor.close()
             if conn:
                 conn.close()
+
 
     # ACTUALIZAR ESTADO DEL MODULO
     def update_estado_moduloXrol(self, modulo_id: int, actualizar_estado_modulo: Actualizar_Estado_Modulo):

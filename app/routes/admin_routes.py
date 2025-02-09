@@ -64,3 +64,23 @@ async def update_estado_modulo(modulo_id: int, actualizar_estado_modulo: Actuali
 async def create_moduloXrol(moduloxrol: ModuloxRol):
     rpta = nuevo_admin.create_moduloXrol(moduloxrol)
     return rpta
+
+@router.get("/get_moduloXrol/{modulo_id}", response_model=ModuloxRol)
+async def get_moduloXrol(modulo_id: int):
+    rpta = nuevo_admin.get_moduloXrol(modulo_id)
+    return rpta
+
+@router.get("/get_modulosXrol/")
+async def get_modulosXrol():
+    rpta = nuevo_admin.get_modulosXrol()
+    return rpta
+
+@router.put("/update_moduloXrol02/{modulo_id}")
+async def update_moduloXrol02(modulo_id: int, moduloxrol: ModuloxRol):
+    try:
+        rpta = nuevo_admin.update_moduloXrol02(modulo_id, moduloxrol)
+        return rpta
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

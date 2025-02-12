@@ -1,12 +1,12 @@
 from pydantic import BaseModel
 
 
-class Mascotas(BaseModel):
+class DiscapacitadoV(BaseModel):
     id: int = None
     nombre: str
-    id_genero_mascota: int
-    id_tipo_mascota: int
-    id_propietario: int
+    id_genero_discapacitado: int
+    id_tipo_ceguera: int
+    id_cuidador: int
     estado: bool
 
 class GetmascotaR(BaseModel):

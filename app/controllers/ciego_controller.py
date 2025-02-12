@@ -1,38 +1,38 @@
 import mysql.connector
 from fastapi import HTTPException
 from app.config.db_config import get_db_connection
-from app.models.mascotas_model import Mascotas
+from app.models.ciego_model import DiscapacitadoV
 from app.models.reporte_mascota_model import MascotasReport
-from app.models.mascota_map_model import MascotasMap
+from app.models.ciego_map_model import CiegosMap
 from fastapi.encoders import jsonable_encoder
 
 
 class CiegoController():
-
-    def Mascotas_Map(self, mascotamap: MascotasMap):
+    
+    def Ciegos_Map(self, ciegosmap: CiegosMap):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(
                 """SELECT 
-                    m.nombre AS nombre_mascota, 
+                    d.nombre AS nombre_discapacitado, 
                     c.latitud, 
                     c.longitud, 
                     cgps.numero_serie, 
                     cgps.nivel_bateria
                 FROM 
-                    mascota m
+                    ciegos d
                 JOIN 
-                    coordenada c ON m.id = c.id_mascota
+                    coordenada c ON d.id = c.id_ciego
                 LEFT JOIN 
-                    collares_con_gps cgps ON cgps.id_mascota_vinculada = m.id
+                    unidad_gps cgps ON cgps.id_ciego_vinculado = d.id
                 WHERE 
-                    m.id_propietario = %s
+                    d.id_cuidador = %s
                 ORDER BY 
-                    m.nombre, c.create_f DESC
+                    d.nombre, c.create_f DESC
                 LIMIT 25;
                 """,
-                (mascotamap.user_id,)
+                (ciegosmap.user_id,)
             )
             result = cursor.fetchall()
             payload = []
@@ -40,7 +40,7 @@ class CiegoController():
             # Recorremos cada fila de los resultados
             for data in result:
                 content = {
-                    'nombre_mascota': data[0],
+                    'nombre_discapacitado': data[0],
                     'latitud': data[1],
                     'longitud': data[2],
                     'numero_serie': data[3],
@@ -54,7 +54,7 @@ class CiegoController():
                 return {"resultado": json_data}
             else:
                 raise HTTPException(
-                    status_code=404, detail="Mascotas no encontradas para el usuario"
+                    status_code=404, detail="El Discapacitado no ha sido encontrado para el usuario"
                 )
 
         except mysql.connector.Error as err:
@@ -66,30 +66,30 @@ class CiegoController():
             conn.close()
 
         # MASCOTAS REPORTE
-
+    
+    ###TIENES QUE ARREGLAR EL REPORTE
     def Mascotas_Report(self, mascotasreport: MascotasReport):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(
                 """SELECT
-                mascota.id AS id_mascota,
-                mascota.nombre,
-                mascota.id_genero_mascota,
-                mascota.id_tipo_mascota,
-                mascota.id_propietario,
-                mascota.fecha_hora,
-                mascota.estado AS reporte_mascota
+                ciegos.id AS id_discapacitado,
+                ciegos.nombre,
+                ciegos.id_genero_discapacitado,
+                ciegos.id_tipo_ceguera,
+                ciegos.id_cuidador,
+                ciegos.estado AS reporte_discapacitados
                 FROM
-                    mascota
+                    ciegos
                 INNER JOIN
-                    genero_mascota AS genero ON mascota.id_genero_mascota = genero.id
+                    genero_discapacitado AS genero ON ciegos.id_genero_discapacitado = genero.id
                 INNER JOIN
-                    tipo_mascota AS tipo ON mascota.id_tipo_mascota = tipo.id
+                    tipo_ceguera AS tipo ON ciegos.id_tipo_ceguera = tipo.id
                 INNER JOIN
-                    usuarios AS dueño ON mascota.id_propietario = dueño.id
+                    usuarios AS dueño ON ciegos.id_cuidador = dueño.id
                 WHERE
-                    mascota.fecha_hora BETWEEN %s AND %s
+                    ciegos.fecha_hora BETWEEN %s AND %s
                 LIMIT 0, 25;""", (mascotasreport.fecha1, mascotasreport.fecha2))
             result = cursor.fetchall()
             payload = []
@@ -118,28 +118,28 @@ class CiegoController():
         finally:
             conn.close()
 
-    # CREAR MASCOTA
-    def create_mascota(self, mascota: Mascotas):
+    # CREAR DISCAPACITADO
+    def create_discapacitadoV(self, discapacitadov: DiscapacitadoV):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO mascota (nombre,id_genero_mascota,id_tipo_mascota,id_propietario,estado) VALUES (%s, %s, %s, %s, %s)",
-                           (mascota.nombre, mascota.id_genero_mascota, mascota.id_tipo_mascota, mascota.id_propietario, mascota.estado))
+            cursor.execute("INSERT INTO ciegos (nombre,id_genero_discapacitado,id_tipo_ceguera,id_cuidador,estado) VALUES (%s, %s, %s, %s, %s)",
+                           (discapacitadov.nombre, discapacitadov.id_genero_discapacitado, discapacitadov.id_tipo_ceguera, discapacitadov.id_cuidador, discapacitadov.estado))
             conn.commit()
             conn.close()
-            return {"resultado": "Mascota Registrada"}
+            return {"resultado": "Discapacitado Registrado"}
         except mysql.connector.Error as err:
             conn.rollback()
         finally:
             conn.close()
 
-    # BUSCAR MASCOTA
-    def get_mascota(self, mascota_id: int):
+    # BUSCAR DISCAPACITADO
+    def get_discapacitadoV(self, discapacitado_id: int):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM mascota WHERE id = %s", (mascota_id,))
+                "SELECT * FROM ciegos WHERE id = %s", (discapacitado_id,))
             result = cursor.fetchone()
             payload = []
             content = {}
@@ -147,11 +147,10 @@ class CiegoController():
             content = {
                 "id": int(result[0]),
                 "nombre": result[1],
-                "id_genero_mascota": int(result[2]),
-                "id_tipo_mascota": int(result[3]),
-                "id_propietario": int(result[4]),
-                "fecha_hora": result[5],
-                'estado': bool(result[6]),
+                "id_genero_discapacitado": int(result[2]),
+                "id_tipo_ceguera": int(result[3]),
+                "id_cuidador": int(result[4]),
+                'estado': bool(result[5]),
             }
             payload.append(content)
 
@@ -160,19 +159,19 @@ class CiegoController():
                 return json_data
             else:
                 raise HTTPException(
-                    status_code=404, detail="Mascota not found")
+                    status_code=404, detail="Discapacitado not found")
 
         except mysql.connector.Error as err:
             conn.rollback()
         finally:
             conn.close()
 
-    # VER MASCOTAS
-    def get_mascotas(self):
+    # VER TODOS LOS DISCAPACITADOS
+    def get_discapacitadosV(self):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM mascota")
+            cursor.execute("SELECT * FROM ciegos")
             result = cursor.fetchall()
             payload = []
             content = {}
@@ -180,11 +179,10 @@ class CiegoController():
                 content = {
                     'id': int(data[0]),
                     'nombre': data[1],
-                    'id_genero_mascota': int(data[2]),
-                    'id_tipo_mascota': int(data[3]),
-                    'id_propietario': int(data[4]),
-                    'fecha_hora': data[5],
-                    'estado': bool(data[6]),
+                    'id_genero_discapacitado': int(data[2]),
+                    'id_tipo_ceguera': int(data[3]),
+                    'id_cuidador': int(data[4]),
+                    'estado': bool(data[5]),
                 }
                 payload.append(content)
                 content = {}
@@ -193,47 +191,46 @@ class CiegoController():
                 return {"resultado": json_data}
             else:
                 raise HTTPException(
-                    status_code=404, detail="Mascota not found")
+                    status_code=404, detail="Discapacitado not found")
 
         except mysql.connector.Error as err:
             conn.rollback()
         finally:
             conn.close()
 
-    # ACTUALIZAR MASCOTA
-    def update_mascota(self, mascota_id: int, mascota: Mascotas):
+    # ACTUALIZAR DISCAPACITADO
+    def update_discapacitadoV(self, discapacitado_id: int, discapacitadov: DiscapacitadoV):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("UPDATE mascota SET nombre = %s, genero = %s, estado = %s WHERE id = %s",
-                           (mascota.nombre, mascota.genero, mascota.estado, mascota_id))
+            cursor.execute("UPDATE ciegos SET nombre = %s, id_genero_discapacitado = %s, id_tipo_ceguera = %s, id_cuidador = %s, estado = %s WHERE id = %s",
+                           (discapacitadov.nombre, discapacitadov.id_genero_discapacitado, discapacitadov.id_tipo_ceguera, discapacitadov.id_cuidador, discapacitadov.estado, discapacitado_id))
             conn.commit()
             if cursor.rowcount == 0:
                 raise HTTPException(
-                    status_code=404, detail="Mascota not found")
-            return {"mensaje": "Datos de mascota actualizado exitosamente"}
+                    status_code=404, detail="Discapacitado not found")
+            return {"mensaje": "Datos del Discapacitado actualizado exitosamente"}
         except mysql.connector.Error as err:
             raise HTTPException(status_code=500, detail=str(err))
         finally:
             if conn:
                 conn.close()
 
-    # ELIMINAR MASCOTA
-    def delete_mascotas(self, mascota_id: int):
+    # ELIMINAR DISCAPACITADO
+    def delete_discapacitadoV(self, discapacitado_id: int):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(
-                "DELETE FROM mascota WHERE id = %s", (mascota_id,))
+                "DELETE FROM ciegos WHERE id = %s", (discapacitado_id,))
             conn.commit()
             if cursor.rowcount == 0:
                 raise HTTPException(
-                    status_code=404, detail="Mascota no encontrada")
-            return {"mensaje": "Mascota eliminada exitosamente"}
+                    status_code=404, detail="Discapacitado no encontrado")
+            return {"mensaje": "Discapacitado eliminado exitosamente"}
         except mysql.connector.Error as err:
             raise HTTPException(status_code=500, detail=str(err))
         finally:
             if conn:
                 conn.close()
 
-    # FIN MASCOTAS

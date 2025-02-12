@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
 
-class MascotasMap(BaseModel):
+class CiegosMap(BaseModel):
     user_id: int

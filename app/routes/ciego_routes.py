@@ -1,64 +1,59 @@
 from fastapi import APIRouter, HTTPException
-from app.models.mascotas_model import Mascotas
+from app.models.ciego_model import DiscapacitadoV
 from app.models.reporte_mascota_model import MascotasReport
 from app.models.mascota_map_model import MascotasMap
 from app.controllers.mascota_controller import *
 
 router = APIRouter()
 
-nueva_mascota = CiegoController()
+nuevo_discapacitado = CiegoController()
 
 
-@router.post("/Mascotas_Map")
-async def Mascotas_Map(mascotamap: MascotasMap):
-    rpta = nueva_mascota.Mascotas_Map(mascotamap)
+@router.post("/Ciegos_Map")
+async def Ciegos_Map(mascotamap: MascotasMap):
+    rpta = nuevo_discapacitado.Ciegos_Map(mascotamap)
     return rpta
 
 
 @router.post("/Mascotas_Report")
 async def Mascotas_Report(mascotasreport: MascotasReport):
-    rpta = nueva_mascota.Mascotas_Report(mascotasreport)
+    rpta = nuevo_discapacitado.Mascotas_Report(mascotasreport)
     return rpta
 
-
-@router.post("/create_mascota")
-async def create_mascota(mascota: Mascotas):
-    rpta = nueva_mascota.create_mascota(mascota)
+@router.post("/create_discapacitadoV")
+async def create_discapacitadoV(discapacitadov: DiscapacitadoV):
+    rpta = nuevo_discapacitado.create_discapacitadoV(discapacitadov)
     return rpta
 
-
-@router.get("/get_mascota/{mascota_id}", response_model=Mascotas)
-async def get_mascota(mascota_id: int):
+@router.get("/get_discapacitadoV/{discapacitado_id}", response_model=DiscapacitadoV)
+async def get_discapacitadoV(discapacitado_id: int):
     try:
-        rpta = nueva_mascota.get_mascota(mascota_id)
+        rpta = nuevo_discapacitado.get_discapacitadoV(discapacitado_id)
         return rpta
     except HTTPException as e:
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.get("/get_discapacitadosV/")
+async def get_discapacitadosV():
+    rpta = nuevo_discapacitado.get_discapacitadosV()
+    return rpta
 
-@router.put("/update_mascota/{mascota_id}")
-async def update_mascota(mascota_id: int, mascota: Mascotas):
+@router.put("/update_discapacitadoV/{discapacitado_id}")
+async def update_discapacitadoV(discapacitado_id: int, discapacitadov: DiscapacitadoV):
     try:
-        rpta = nueva_mascota.update_mascota(mascota_id, mascota)
+        rpta = nuevo_discapacitado.update_discapacitadoV(discapacitado_id, discapacitadov)
         return rpta
     except HTTPException as e:
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
-@router.get("/get_mascotas/")
-async def get_mascotas():
-    rpta = nueva_mascota.get_mascotas()
-    return rpta
-
-
-@router.delete("/delete_mascota/{mascota_id}")
-async def delete_mascotas(mascota_id: int):
+@router.delete("/delete_discapacitadoV/{discapacitado_id}")
+async def delete_discapacitadoV(discapacitado_id: int):
     try:
-        rpta = nueva_mascota.delete_mascotas(mascota_id)
+        rpta = nuevo_discapacitado.delete_discapacitadoV(discapacitado_id)
         return rpta
     except HTTPException as e:
         raise e

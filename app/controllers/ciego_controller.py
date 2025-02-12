@@ -7,7 +7,7 @@ from app.models.mascota_map_model import MascotasMap
 from fastapi.encoders import jsonable_encoder
 
 
-class Mascotacontroller():
+class CiegoController():
 
     def Mascotas_Map(self, mascotamap: MascotasMap):
         try:

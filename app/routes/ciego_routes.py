@@ -6,7 +6,7 @@ from app.controllers.mascota_controller import *
 
 router = APIRouter()
 
-nueva_mascota = Mascotacontroller()
+nueva_mascota = CiegoController()
 
 
 @router.post("/Mascotas_Map")

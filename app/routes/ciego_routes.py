@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from app.models.ciego_model import DiscapacitadoV
 from app.models.reporte_mascota_model import MascotasReport
-from app.models.mascota_map_model import MascotasMap
-from app.controllers.mascota_controller import *
+from app.models.ciego_map_model import CiegosMap
+from app.controllers.ciego_controller import *
 
 router = APIRouter()
 
@@ -10,7 +10,7 @@ nuevo_discapacitado = CiegoController()
 
 
 @router.post("/Ciegos_Map")
-async def Ciegos_Map(mascotamap: MascotasMap):
+async def Ciegos_Map(mascotamap: CiegosMap):
     rpta = nuevo_discapacitado.Ciegos_Map(mascotamap)
     return rpta
 

@@ -8,8 +8,8 @@ nuevo_usuario = Usercontroller()
 
 
 @router.post("/login_generate_token")
-async def login_generate_token(user: Login):
-    rpta = await nuevo_usuario.login_generate_token(user)
+async def login_generate_token(user: Login, recaptcha_token: str):
+    rpta = await nuevo_usuario.login_generate_token(user, recaptcha_token)
     return rpta
 
 

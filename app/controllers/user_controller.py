@@ -184,15 +184,17 @@ class Usercontroller():
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO usuarios (email,password,nombre,apellido,documento,telefono,id_rol, estado) VALUES (%s, %s, %s, %s, %s, %s ,%s ,%s)",
+            cursor.execute("INSERT INTO usuarios (email,password,nombre,apellido,documento,telefono,id_rol,estado) VALUES (%s, %s, %s, %s, %s, %s ,%s ,%s)",
                            (user.email, user.password, user.nombre, user.apellido, user.documento, user.telefono, user.id_rol, user.estado))
             conn.commit()
             conn.close()
             return {"resultado": "Usuario creado"}
         except mysql.connector.Error as err:
             conn.rollback()
+            return {"error": f"Error al crear usuario: {err}"}
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     # BUSCAR USUARIO
     def get_user(self, user_id: int):

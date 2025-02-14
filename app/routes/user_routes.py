@@ -91,9 +91,9 @@ async def Validar_Correo(user: ValidarCorreo):
     return rpta
 
 @router.put("/update_contraseña")
-async def update_user(user: Login):
+async def update_contraseña(user: Login):
     try:
-        rpta = nuevo_usuario.update_user(user)
+        rpta = nuevo_usuario.update_contraseña(user)
         return rpta
     except HTTPException as e:
         raise e

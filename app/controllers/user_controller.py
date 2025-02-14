@@ -1,8 +1,4 @@
 import mysql.connector
-
-##captcha
-import requests
-##SOLO ESO
 from fastapi import HTTPException, UploadFile
 import pandas as pd
 from app.config.db_config import get_db_connection
@@ -13,27 +9,8 @@ import jwt
 
 SECRET_KEY = "PetTrackerOF"
 
-# Clave secreta de reCAPTCHA (debes obtenerla de Google)
-RECAPTCHA_SECRET_KEY = "6Lf0vdUqAAAAAIT2ro4eRfRxaCjleAdWSpCRso27"
 
 class Usercontroller():
-
-    
-    #VERIFICACION DEL CAPTCHA
-    async def verify_recaptcha(recaptcha_token: str):
-        """Verifica el token del Captcha con Google reCAPTCHA"""
-        url = "https://www.google.com/recaptcha/api/siteverify"
-        data = {
-            "secret": RECAPTCHA_SECRET_KEY,
-            "response": recaptcha_token
-        }
-        response = requests.post(url, data=data)
-        result = response.json()
-
-        if not result.get("success"):
-            raise HTTPException(status_code=400, detail="Captcha inválido o fallido")
-
-
 
     # CREAR TOCKEN
     def create_access_token(self, data: dict, expires_delta: timedelta = None):

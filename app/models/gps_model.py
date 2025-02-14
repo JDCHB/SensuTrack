@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class Collares_GPS(BaseModel):
+class Dispositivo_GPS(BaseModel):
     id: int = None
     numero_serie: str
     latitud: str

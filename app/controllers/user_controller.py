@@ -317,7 +317,7 @@ class Usercontroller():
             content = {}
             for data in result:
                 content = {
-                    'email': data[1],
+                    'email': data[0],
                 }
                 payload.append(content)
                 content = {}

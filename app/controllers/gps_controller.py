@@ -12,8 +12,8 @@ class GPScontroller():
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO unidad_gps (numero_serie, nivel_bateria, fecha_hora_ultimo_reporte, id_ciego_vinculado, estado) VALUES (%s, %s, %s, %s, %s)",
-                           (dispositivo_gps.numero_serie, dispositivo_gps.nivel_bateria, dispositivo_gps.fecha_hora_ultimo_reporte, dispositivo_gps.id_ciego_vinculado, dispositivo_gps.estado,))
+            cursor.execute("INSERT INTO unidad_gps (numero_serie, nivel_bateria, id_ciego_vinculado, estado) VALUES (%s, %s, %s, %s)",
+                           (dispositivo_gps.numero_serie, dispositivo_gps.nivel_bateria, dispositivo_gps.id_ciego_vinculado, dispositivo_gps.estado,))
             conn.commit()
             conn.close()
             return {"resultado": "UnidadGPS Registrado exitosamente"}
@@ -39,9 +39,8 @@ class GPScontroller():
                 "id": int(result[0]),
                 "numero_serie": result[1],
                 "nivel_bateria": result[2],
-                "fecha_hora_ultimo_reporte": result[3],
-                "id_ciego_vinculado": int(result[4]),
-                'estado': bool(result[5]),
+                "id_ciego_vinculado": int(result[3]),
+                'estado': bool(result[4]),
             }
             payload.append(content)
 
@@ -71,9 +70,8 @@ class GPScontroller():
                     "id": int(data[0]),
                     "numero_serie": data[1],
                     "nivel_bateria": data[2],
-                    "fecha_hora_ultimo_reporte": data[3],
-                    "id_ciego_vinculado": int(data[4]),
-                    'estado': bool(data[5]),
+                    "id_ciego_vinculado": int(data[3]),
+                    'estado': bool(data[4]),
                 }
                 payload.append(content)
                 content = {}
@@ -94,8 +92,8 @@ class GPScontroller():
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("UPDATE unidad_gps SET numero_serie = %s, nivel_bateria = %s, fecha_hora_ultimo_reporte = %s, id_ciego_vinculado=%s, estado = %s WHERE id = %s",
-                           (dispositivo_gps.numero_serie, dispositivo_gps.nivel_bateria, dispositivo_gps.fecha_hora_ultimo_reporte, dispositivo_gps.id_ciego_vinculado, dispositivo_gps.estado, gps_id))
+            cursor.execute("UPDATE unidad_gps SET numero_serie = %s, nivel_bateria = %s, id_ciego_vinculado=%s, estado = %s WHERE id = %s",
+                           (dispositivo_gps.numero_serie, dispositivo_gps.nivel_bateria, dispositivo_gps.id_ciego_vinculado, dispositivo_gps.estado, gps_id))
             conn.commit()
             if cursor.rowcount == 0:
                 raise HTTPException(

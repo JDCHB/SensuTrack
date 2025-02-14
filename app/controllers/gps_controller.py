@@ -24,7 +24,7 @@ class GPScontroller():
             if conn:
                 conn.close()
 
-    # BUSCAR COLLARGPS
+    # BUSCAR UNIDADGPS
     def get_gps(self, gps_id: int):
         try:
             conn = get_db_connection()
@@ -57,7 +57,7 @@ class GPScontroller():
         finally:
             conn.close()
 
-    # VER COLLARESGPS
+    # VER UNIDADGPS
     def get_Unidadesgps(self):
         try:
             conn = get_db_connection()
@@ -89,7 +89,7 @@ class GPScontroller():
         finally:
             conn.close()
 
-    # ACTUALIZAR COLLARGPS
+    # ACTUALIZAR UNIDADGPS
     def update_gps(self, gps_id: int, dispositivo_gps: Dispositivo_GPS):
         try:
             conn = get_db_connection()
@@ -107,7 +107,31 @@ class GPScontroller():
             if conn:
                 conn.close()
 
-    # ELIMINAR COLLARGPS
+    # ACTUALIZAR ESTADO DE LA UNIDAD GPS
+    def update_estado_GPS(self, gps_id: int, gpsestado: GPSEstado):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute(
+                "UPDATE unidad_gps SET estado = %s WHERE id = %s",
+                (gpsestado.estado, gps_id,)
+            )
+            conn.commit()
+
+            if cursor.rowcount == 0:
+                raise HTTPException(
+                    status_code=404, detail="GPS no encontrado")
+
+            return {"mensaje": "Estado del GPS actualizado exitosamente"}
+
+        except mysql.connector.Error as err:
+            raise HTTPException(status_code=500, detail=str(err))
+
+        finally:
+            if conn:
+                conn.close()
+
+    # ELIMINAR UNIDADGPS
     def delete_gps(self, gps_id: int):
         try:
             conn = get_db_connection()

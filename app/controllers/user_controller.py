@@ -46,7 +46,7 @@ class Usercontroller():
 
     # GENERAR EL TOKEN
 
-    async def login_generate_token(self, user: Login):
+    async def login_generate_token(self, user: Login, recaptcha_token: str):
         try:
 
             # Verificar Captcha antes de validar credenciales

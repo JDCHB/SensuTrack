@@ -334,7 +334,7 @@ def Validar_Correo(self, user: ValidarCorreo):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT email FROM usuarios WHERE email = %s", (user.email))
+            cursor.execute("SELECT email FROM usuarios WHERE email = %s", (user.email,))
             result = cursor.fetchone()
             payload = []
             content = {}

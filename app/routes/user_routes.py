@@ -85,9 +85,9 @@ async def delete_user(user_id: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/Cambio_Contraseña")
-async def Cambio_Contraseña(user: CambioContraseña):
-    rpta = nuevo_usuario.Cambio_Contraseña(user)
+@router.post("/Validar_Correo")
+async def Validar_Correo(user: ValidarCorreo):
+    rpta = nuevo_usuario.Validar_Correo(user)
     return rpta
 
 @router.put("/update_contraseña")

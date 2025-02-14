@@ -35,5 +35,5 @@ class Token(BaseModel):
 class UserEstado(BaseModel):
     estado: bool
 
-class CambioContraseña(BaseModel):
+class ValidarCorreo(BaseModel):
     email: str

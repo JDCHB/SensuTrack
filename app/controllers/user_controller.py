@@ -306,7 +306,7 @@ class Usercontroller():
             if conn:
                 conn.close()
 
-    def Cambio_Contraseña(self, user: CambioContraseña):
+    def Validar_Correo(self, user: ValidarCorreo):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()

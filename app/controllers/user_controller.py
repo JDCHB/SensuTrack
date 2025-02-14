@@ -23,11 +23,8 @@ class Usercontroller():
 
     # GENERAR EL TOKEN
 
-    async def login_generate_token(self, user: Login, recaptcha_token: str):
+    async def login_generate_token(self, user: Login):
         try:
-
-            # Verificar Captcha antes de validar credenciales
-            await verify_recaptcha(recaptcha_token)
 
             conn = get_db_connection()
             cursor = conn.cursor()

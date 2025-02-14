@@ -306,31 +306,6 @@ class Usercontroller():
             if conn:
                 conn.close()
 
-    def Validar_Correo(self, user: ValidarCorreo):
-        try:
-            conn = get_db_connection()
-            cursor = conn.cursor()
-            cursor.execute(
-                "SELECT email FROM usuarios WHERE email = %s", (user.email))
-            result = cursor.fetchall()
-            payload = []
-            content = {}
-            for data in result:
-                content = {
-                    'email': data[0],
-                }
-                payload.append(content)
-                content = {}
-            json_data = jsonable_encoder(payload)
-            if result:
-                return {"resultado": json_data}
-            else:
-                raise HTTPException(status_code=404, detail="Correo not found")
-        except mysql.connector.Error as err:
-            conn.rollback()
-        finally:
-            conn.close()
-
     # ACTUALIZAR ESTADO USUARIO
     def update_contraseña(self, user: Login):
         try:
@@ -354,6 +329,34 @@ class Usercontroller():
         finally:
             if conn:
                 conn.close()
+
+def Validar_Correo(self, user: ValidarCorreo):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT email FROM usuarios WHERE email = %s", (user.email))
+            result = cursor.fetchone()
+            payload = []
+            content = {}
+
+            content = {
+                'email': result[0],  
+            }
+            payload.append(content)
+
+            json_data = jsonable_encoder(content)
+            if result:
+                return json_data
+            else:
+                raise HTTPException(status_code=404, detail="Correo not found")
+
+        except mysql.connector.Error as err:
+            conn.rollback()
+            return {"error": f"Database error: {err}"}
+        finally:
+            if conn:
+                conn.close()
+
 
 
 

@@ -5,7 +5,6 @@ router = APIRouter()
 
 nueva_unidad_gps = GPScontroller()
 
-
 @router.post("/create_gps")
 async def create_gps(dispositivo_gps: Dispositivo_GPS):
     rpta = nueva_unidad_gps.create_gps(dispositivo_gps)

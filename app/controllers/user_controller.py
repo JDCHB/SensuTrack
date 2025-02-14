@@ -330,32 +330,28 @@ class Usercontroller():
             if conn:
                 conn.close()
 
-def Validar_Correo(self, user: ValidarCorreo):
+    def Validar_Correo(self, user: ValidarCorreo):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
+
+            # Se corrige la consulta agregando la coma para que sea una tupla válida
             cursor.execute("SELECT email FROM usuarios WHERE email = %s", (user.email,))
             result = cursor.fetchone()
-            payload = []
-            content = {}
 
-            content = {
-                'email': result[0],  
-            }
-            payload.append(content)
-
-            json_data = jsonable_encoder(content)
-            if result:
-                return json_data
-            else:
-                raise HTTPException(status_code=404, detail="Correo not found")
+            if result:  # Si hay un resultado, se devuelve el email
+                return jsonable_encoder({"email": result[0]})
+            else:  # Si no se encuentra, se lanza un error 404
+                raise HTTPException(status_code=404, detail="Correo no encontrado")
 
         except mysql.connector.Error as err:
             conn.rollback()
             return {"error": f"Database error: {err}"}
         finally:
+            if cursor:
+                cursor.close()  # Cerramos el cursor
             if conn:
-                conn.close()
+                conn.close()  # Cerramos la conexión
 
 
 

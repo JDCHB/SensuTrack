@@ -34,3 +34,6 @@ class Token(BaseModel):
 
 class UserEstado(BaseModel):
     estado: bool
+
+class CambioContraseña(BaseModel):
+    email: str

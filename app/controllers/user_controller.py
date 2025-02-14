@@ -2,7 +2,7 @@ import mysql.connector
 from fastapi import HTTPException, UploadFile
 import pandas as pd
 from app.config.db_config import get_db_connection
-from app.models.user_model import User, Login, Token, UserEstado, UPDATE_User
+from app.models.user_model import *
 from fastapi.encoders import jsonable_encoder
 from datetime import datetime, timedelta
 import jwt
@@ -305,5 +305,56 @@ class Usercontroller():
         finally:
             if conn:
                 conn.close()
+
+    def Cambio_Contraseña(self, user: CambioContraseña):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT email FROM usuarios WHERE email = %s", (user.email))
+            result = cursor.fetchall()
+            payload = []
+            content = {}
+            for data in result:
+                content = {
+                    'email': data[1],
+                }
+                payload.append(content)
+                content = {}
+            json_data = jsonable_encoder(payload)
+            if result:
+                return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="Correo not found")
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
+    # ACTUALIZAR ESTADO USUARIO
+    def update_contraseña(self, user: Login):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute(
+                "UPDATE usuarios SET password = %s WHERE email = %s",
+                (user.password, user.email)
+            )
+            conn.commit()
+
+            if cursor.rowcount == 0:
+                raise HTTPException(
+                    status_code=404, detail="Correo no encontrado")
+
+            return {"mensaje": "Contraseña actualizada exitosamente"}
+
+        except mysql.connector.Error as err:
+            raise HTTPException(status_code=500, detail=str(err))
+
+        finally:
+            if conn:
+                conn.close()
+
+
 
 # FIN DE LA CLASE USUARIO

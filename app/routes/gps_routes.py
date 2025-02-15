@@ -42,7 +42,7 @@ async def update_gps(gps_id: int, dispositivo_gps: Dispositivo_GPS):
 @router.put("/update_estado_GPS/{gps_id}")
 async def update_estado_GPS(gps_id: int, gpsestado: GPSEstado):
     try:
-        rpta = nuevo_usuario.update_estado_GPS(gps_id, gpsestado)
+        rpta = nueva_unidad_gps.update_estado_GPS(gps_id, gpsestado)
         return rpta
     except HTTPException as e:
         raise e

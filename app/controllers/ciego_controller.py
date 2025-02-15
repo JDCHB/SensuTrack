@@ -198,6 +198,43 @@ class CiegoController():
         finally:
             conn.close()
 
+    # VER TODOS LOS DISCAPACITADOS
+    def get_discapacitadosV_SIN_GPS(self):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT c.* 
+                FROM ciegos c
+                LEFT JOIN unidad_gps u ON c.id = u.id_ciego_vinculado
+                WHERE u.id_ciego_vinculado IS NULL
+            """)
+            result = cursor.fetchall()
+            payload = []
+            
+            for data in result:
+                content = {
+                    'id': int(data[0]),
+                    'nombre': data[1],
+                    'id_genero_discapacitado': int(data[2]),
+                    'id_tipo_ceguera': int(data[3]),
+                    'id_cuidador': int(data[4]),
+                    'estado': bool(data[5]),
+                }
+                payload.append(content)
+
+            json_data = jsonable_encoder(payload)
+            
+            if result:
+                return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="No hay discapacitados sin GPS asignado")
+
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
     # ACTUALIZAR DISCAPACITADO
     def update_discapacitadoV(self, discapacitado_id: int, discapacitadov: DiscapacitadoV):
         try:

@@ -71,23 +71,24 @@ class CiegoController():
             cursor = conn.cursor()
             cursor.execute(
                 """SELECT
-                ciegos.id AS id_discapacitado,
-                ciegos.nombre,
-                ciegos.id_genero_discapacitado,
-                ciegos.id_tipo_ceguera,
-                ciegos.id_cuidador,
-                ciegos.estado AS reporte_discapacitados
-                FROM
-                    ciegos
-                INNER JOIN
-                    genero_discapacitado AS genero ON ciegos.id_genero_discapacitado = genero.id
-                INNER JOIN
-                    tipo_ceguera AS tipo ON ciegos.id_tipo_ceguera = tipo.id
-                INNER JOIN
-                    usuarios AS dueño ON ciegos.id_cuidador = dueño.id
-                WHERE
-                    ciegos.fecha BETWEEN %s AND %s
-                LIMIT 0, 25;""", (ciegosreporte.fecha1, ciegosreporte.fecha2,))
+                    ciegos.id AS id_discapacitado,
+                    ciegos.nombre,
+                    ciegos.id_genero_discapacitado,
+                    ciegos.id_tipo_ceguera,
+                    ciegos.id_cuidador,
+                    mascota.fecha,
+                    ciegos.estado AS reporte_discapacitados
+                    FROM
+                        ciegos
+                    INNER JOIN
+                        genero_discapacitado AS genero ON ciegos.id_genero_discapacitado = genero.id
+                    INNER JOIN
+                        tipo_ceguera AS tipo ON ciegos.id_tipo_ceguera = tipo.id
+                    INNER JOIN
+                        usuarios AS dueño ON ciegos.id_cuidador = dueño.id
+                    WHERE
+                        ciegos.fecha BETWEEN %s AND %s
+                    LIMIT 0, 25;""", (ciegosreporte.fecha1, ciegosreporte.fecha2))
             result = cursor.fetchall()
             payload = []
             content = {}

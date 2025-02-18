@@ -64,9 +64,7 @@ class CiegoController():
         finally:
             conn.close()
 
-        # MASCOTAS REPORTE
-    
-    ###TIENES QUE ARREGLAR EL REPORTE
+        # CIEGOS REPORTE
     def Ciegos_Report(self, ciegosreporte: CiegosReporte):
         try:
             conn = get_db_connection()
@@ -89,7 +87,7 @@ class CiegoController():
                     usuarios AS dueño ON ciegos.id_cuidador = dueño.id
                 WHERE
                     ciegos.fecha_hora BETWEEN %s AND %s
-                LIMIT 0, 25;""", (ciegosreporte.fecha1, ciegosreporte.fecha2))
+                LIMIT 0, 25;""", (ciegosreporte.fecha1, ciegosreporte.fecha2,))
             result = cursor.fetchall()
             payload = []
             content = {}

@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.models.ciego_model import DiscapacitadoV
-from app.models.reporte_mascota_model import MascotasReport
+from app.models.ciego_model import *
 from app.models.ciego_map_model import CiegosMap
 from app.controllers.ciego_controller import *
 

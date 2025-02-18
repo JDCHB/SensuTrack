@@ -86,7 +86,7 @@ class CiegoController():
                 INNER JOIN
                     usuarios AS dueño ON ciegos.id_cuidador = dueño.id
                 WHERE
-                    ciegos.fecha_hora BETWEEN %s AND %s
+                    ciegos.fecha BETWEEN %s AND %s
                 LIMIT 0, 25;""", (ciegosreporte.fecha1, ciegosreporte.fecha2,))
             result = cursor.fetchall()
             payload = []
@@ -98,7 +98,7 @@ class CiegoController():
                     'id_genero_discapacitado': int(data[2]),
                     'id_tipo_ceguera': int(data[3]),
                     'id_cuidador': int(data[4]),
-                    'fecha_hora': data[5],
+                    'fecha': data[5],
                     'estado': bool(data[6]),
                 }
                 payload.append(content)

@@ -76,7 +76,7 @@ class CiegoController():
                     ciegos.id_genero_discapacitado,
                     ciegos.id_tipo_ceguera,
                     ciegos.id_cuidador,
-                    mascota.fecha,
+                    ciegos.fecha,
                     ciegos.estado AS reporte_discapacitados
                     FROM
                         ciegos

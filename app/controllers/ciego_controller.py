@@ -68,7 +68,7 @@ class CiegoController():
         # MASCOTAS REPORTE
     
     ###TIENES QUE ARREGLAR EL REPORTE
-    def Mascotas_Report(self, mascotasreport: MascotasReport):
+    def Ciegos_Report(self, ciegosreporte: CiegosReporte):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
@@ -90,7 +90,7 @@ class CiegoController():
                     usuarios AS dueño ON ciegos.id_cuidador = dueño.id
                 WHERE
                     ciegos.fecha_hora BETWEEN %s AND %s
-                LIMIT 0, 25;""", (mascotasreport.fecha1, mascotasreport.fecha2))
+                LIMIT 0, 25;""", (ciegosreporte.fecha1, ciegosreporte.fecha2))
             result = cursor.fetchall()
             payload = []
             content = {}
@@ -98,9 +98,9 @@ class CiegoController():
                 content = {
                     'id': int(data[0]),
                     'nombre': data[1],
-                    'id_genero_mascota': int(data[2]),
-                    'id_tipo_mascota': int(data[3]),
-                    'id_propietario': int(data[4]),
+                    'id_genero_discapacitado': int(data[2]),
+                    'id_tipo_ceguera': int(data[3]),
+                    'id_cuidador': int(data[4]),
                     'fecha_hora': data[5],
                     'estado': bool(data[6]),
                 }
@@ -111,7 +111,7 @@ class CiegoController():
                 return {"resultado": json_data}
             else:
                 raise HTTPException(
-                    status_code=404, detail="Mascota not found")
+                    status_code=404, detail="Ciego not found")
 
         except mysql.connector.Error as err:
             conn.rollback()

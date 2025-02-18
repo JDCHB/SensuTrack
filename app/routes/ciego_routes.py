@@ -15,9 +15,9 @@ async def Ciegos_Map(mascotamap: CiegosMap):
     return rpta
 
 
-@router.post("/Mascotas_Report")
-async def Mascotas_Report(mascotasreport: MascotasReport):
-    rpta = nuevo_discapacitado.Mascotas_Report(mascotasreport)
+@router.post("/Ciegos_Report")
+async def Ciegos_Report(ciegosreporte: CiegosReporte):
+    rpta = nuevo_discapacitado.Ciegos_Report(ciegosreporte)
     return rpta
 
 @router.post("/create_discapacitadoV")

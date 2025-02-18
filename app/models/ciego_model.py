@@ -9,6 +9,6 @@ class DiscapacitadoV(BaseModel):
     id_cuidador: int
     estado: bool
 
-class GetmascotaR(BaseModel):
+class CiegosReporte(BaseModel):
     fecha1: int
     fecha2: int

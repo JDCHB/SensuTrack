@@ -1,8 +1,7 @@
 import mysql.connector
 from fastapi import HTTPException
 from app.config.db_config import get_db_connection
-from app.models.ciego_model import DiscapacitadoV
-from app.models.reporte_mascota_model import MascotasReport
+from app.models.ciego_model import *
 from app.models.ciego_map_model import CiegosMap
 from fastapi.encoders import jsonable_encoder
 

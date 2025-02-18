@@ -10,5 +10,5 @@ class DiscapacitadoV(BaseModel):
     estado: bool
 
 class CiegosReporte(BaseModel):
-    fecha1: int
-    fecha2: int
+    fecha1: str
+    fecha2: str

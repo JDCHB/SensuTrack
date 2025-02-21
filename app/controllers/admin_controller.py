@@ -206,7 +206,7 @@ class AdminController():
             for result in moduloxrol.id_modulo:
                 print("-------------------------------------------2", result)
                 cursor.execute("""
-                             UPDATE moduloxrol AS mx
+                            UPDATE moduloxrol AS mx
                             SET estado = 1
                             WHERE id_rol = %s AND id_modulo=%s   
                         """, (moduloxrol.id_rol, result))

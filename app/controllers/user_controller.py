@@ -162,14 +162,12 @@ class Usercontroller():
             result = cursor.fetchall()
 
             if result:
-                return {"error": "El usuario ya existe"}
+                return {"resultado": "El usuario ya existe"}
             else:   
-
-            cursor.execute("INSERT INTO usuarios (email,password,nombre,apellido,documento,telefono,id_rol,estado) VALUES (%s, %s, %s, %s, %s, %s ,%s ,%s)",
-                           (user.email, user.password, user.nombre, user.apellido, user.documento, user.telefono, user.id_rol, user.estado))
-            conn.commit()
-            conn.close()
-            return {"resultado": "Usuario creado"}
+                cursor.execute("INSERT INTO usuarios (email,password,nombre,apellido,documento,telefono,id_rol,estado) VALUES (%s, %s, %s, %s, %s, %s ,%s ,%s)",
+                            (user.email, user.password, user.nombre, user.apellido, user.documento, user.telefono, user.id_rol, user.estado))
+                conn.commit()
+                return {"resultado": "Usuario creado"}
         except mysql.connector.Error as err:
             conn.rollback()
             return {"error": f"Error al crear usuario: {err}"}

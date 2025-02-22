@@ -87,7 +87,7 @@ class CiegoController():
                 INNER JOIN
                     usuarios AS cuidador ON ciegos.id_cuidador = cuidador.id
                 WHERE
-                    ciegos.fecha BETWEEN '%s' AND '%s'
+                    ciegos.fecha BETWEEN %s AND %s
                 LIMIT 25;
                 """, (ciegosreporte.fecha1, ciegosreporte.fecha2))
             result = cursor.fetchall()

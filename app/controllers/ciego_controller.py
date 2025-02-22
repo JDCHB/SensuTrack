@@ -66,34 +66,35 @@ class CiegoController():
 
         # CIEGOS REPORTE
     def Ciegos_Report(self, ciegosreporte: CiegosReporte):
-        try:
-            conn = get_db_connection()
-            cursor = conn.cursor()
-            cursor.execute(
-                """SELECT
-                    ciegos.id AS id_discapacitado,
-                    ciegos.nombre,
-                    genero.genero AS genero,
-                    tipo.tp_ceguera AS tipo_ceguera,
-                    cuidador.nombre AS nombre_cuidador,
-                    ciegos.fecha,
-                    ciegos.estado AS reporte_discapacitados
-                FROM
-                    ciegos
-                INNER JOIN
-                    genero_discapacitado AS genero ON ciegos.id_genero_discapacitado = genero.id
-                INNER JOIN
-                    tipo_ceguera AS tipo ON ciegos.id_tipo_ceguera = tipo.id
-                INNER JOIN
-                    usuarios AS cuidador ON ciegos.id_cuidador = cuidador.id
-                WHERE
-                    ciegos.fecha BETWEEN %s AND %s
-                LIMIT 25;
-                """, (ciegosreporte.fecha1, ciegosreporte.fecha2))
-            result = cursor.fetchall()
-            payload = []
-            content = {}
-            for data in result:
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            """SELECT
+                ciegos.id AS id_discapacitado,
+                ciegos.nombre,
+                genero.genero AS genero,
+                tipo.tp_ceguera AS tipo_ceguera,
+                cuidador.nombre AS nombre_cuidador,
+                ciegos.fecha,
+                ciegos.estado AS reporte_discapacitados
+            FROM
+                ciegos
+            INNER JOIN
+                genero_discapacitado AS genero ON ciegos.id_genero_discapacitado = genero.id
+            INNER JOIN
+                tipo_ceguera AS tipo ON ciegos.id_tipo_ceguera = tipo.id
+            INNER JOIN
+                usuarios AS cuidador ON ciegos.id_cuidador = cuidador.id
+            WHERE
+                ciegos.fecha BETWEEN %s AND %s
+            LIMIT 25;
+            """, (ciegosreporte.fecha1, ciegosreporte.fecha2))
+        
+        result = cursor.fetchall()
+        payload = []
+        for data in result:
+            try:
                 content = {
                     'id': int(data[0]),
                     'nombre': data[1],
@@ -104,18 +105,26 @@ class CiegoController():
                     'estado': bool(data[6]),
                 }
                 payload.append(content)
-                content = {}
-            json_data = jsonable_encoder(payload)
-            if result:
-                return {"resultado": json_data}
-            else:
-                raise HTTPException(
-                    status_code=404, detail="Ciego not found")
+            except Exception as e:
+                # Si hay un error al procesar los datos, se omite esa fila
+                continue
 
-        except mysql.connector.Error as err:
-            conn.rollback()
-        finally:
-            conn.close()
+        json_data = jsonable_encoder(payload)
+        if result:
+            return {"resultado": json_data}
+        else:
+            raise HTTPException(status_code=404, detail="Ciego not found")
+
+    except mysql.connector.Error as err:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail="Database error")
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+    
+    finally:
+        conn.close()
+
 
     # CREAR DISCAPACITADO
     def create_discapacitadoV(self, discapacitadov: DiscapacitadoV):

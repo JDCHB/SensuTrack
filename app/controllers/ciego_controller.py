@@ -107,6 +107,7 @@ class CiegoController():
                 content = {}
             json_data = jsonable_encoder(payload)
             if result:
+                print(json_data)  # Esto ayudará a depurar si los datos son correctos
                 return {"resultado": json_data}
             else:
                 raise HTTPException(

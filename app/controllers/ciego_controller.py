@@ -118,6 +118,7 @@ class CiegoController():
             raise HTTPException(status_code=500, detail="Database error")
     
         except Exception as e:
+            print(f"Error: {e}")
             raise HTTPException(status_code=500, detail="Internal Server Error")
         
         finally:

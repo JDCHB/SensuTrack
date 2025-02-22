@@ -64,7 +64,7 @@ class CiegoController():
         finally:
             conn.close()
 
-    # CIEGOS REPORTE
+        # CIEGOS REPORTE
     def Ciegos_Report(self, ciegosreporte: CiegosReporte):
         try:
             conn = get_db_connection()
@@ -90,41 +90,38 @@ class CiegoController():
                     ciegos.fecha BETWEEN %s AND %s
                 LIMIT 25;
                 """, (ciegosreporte.fecha1, ciegosreporte.fecha2))
-            
             result = cursor.fetchall()
             payload = []
+            content = {}
             for data in result:
-                try:
-                    content = {
-                        'id': int(data[0]),
-                        'nombre': data[1],
-                        'id_genero_discapacitado': int(data[2]),
-                        'id_tipo_ceguera': int(data[3]),
-                        'id_cuidador': int(data[4]),
-                        'fecha': data[5],
-                        'estado': bool(data[6]),
-                    }
-                    payload.append(content)
-                except Exception as e:
-                    # Si hay un error al procesar los datos, se omite esa fila
-                    continue
-
+                content = {
+                    'id': int(data[0]),
+                    'nombre': data[1],
+                    'id_genero_discapacitado': int(data[2]),
+                    'id_tipo_ceguera': int(data[3]),
+                    'id_cuidador': int(data[4]),
+                    'fecha': data[5],
+                    'estado': bool(data[6]),
+                }
+                payload.append(content)
+                content = {}
+                
             json_data = jsonable_encoder(payload)
             if result:
                 return {"resultado": json_data}
             else:
-                raise HTTPException(status_code=404, detail="Ciego not found")
+                raise HTTPException(
+                    status_code=404, detail="Ciego not found")
 
         except mysql.connector.Error as err:
             conn.rollback()
             raise HTTPException(status_code=500, detail="Database error")
-        
+    
         except Exception as e:
             raise HTTPException(status_code=500, detail="Internal Server Error")
         
         finally:
             conn.close()
-
 
     # CREAR DISCAPACITADO
     def create_discapacitadoV(self, discapacitadov: DiscapacitadoV):

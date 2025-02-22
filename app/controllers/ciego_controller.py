@@ -64,7 +64,7 @@ class CiegoController():
         finally:
             conn.close()
 
-        # CIEGOS REPORTE
+    # CIEGOS REPORTE
     def Ciegos_Report(self, ciegosreporte: CiegosReporte):
         try:
             conn = get_db_connection()

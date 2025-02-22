@@ -96,10 +96,10 @@ class CiegoController():
             for data in result:
                 content = {
                     'id': int(data[0]),
-                    'nombre': data[1],
-                    'id_genero_discapacitado': int(data[2]),
-                    'id_tipo_ceguera': int(data[3]),
-                    'id_cuidador': int(data[4]),
+                    'nombre': str(data[1]),
+                    'genero': str(data[2]),
+                    'tipo_ceguera': str(data[3]),
+                    'nombre_cuidador': str(data[4]),
                     'fecha': data[5],
                     'estado': bool(data[6]),
                 }

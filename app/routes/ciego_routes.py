@@ -39,6 +39,11 @@ async def get_discapacitadosV():
     rpta = nuevo_discapacitado.get_discapacitadosV()
     return rpta
 
+@router.get("/get_discapacitadosVCOMPLETOS")
+async def get_discapacitadosVCOMPLETOS():
+    rpta = nuevo_discapacitado.get_discapacitadosVCOMPLETOS()
+    return rpta
+
 @router.get("/get_discapacitadosV_SIN_GPS/")
 async def get_discapacitadosV_SIN_GPS():
     rpta = nuevo_discapacitado.get_discapacitadosV_SIN_GPS()

@@ -204,6 +204,55 @@ class CiegoController():
         finally:
             conn.close()
 
+    # EN ESTE SE VEN TODOS LOS DISCAPACITADOS PERO CON SUS DATOS MAS NO CON SUS ID
+    def get_discapacitadosVCOMPLETOS(self):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""SELECT
+                    ciegos.id AS id_discapacitado,
+                    ciegos.nombre,
+                    genero.genero AS genero,
+                    tipo.tp_ceguera AS tipo_ceguera,
+                    cuidador.nombre AS nombre_cuidador,
+                    ciegos.fecha,
+                    ciegos.estado AS reporte_discapacitados
+                FROM
+                    ciegos
+                INNER JOIN
+                    genero_discapacitado AS genero ON ciegos.id_genero_discapacitado = genero.id
+                INNER JOIN
+                    tipo_ceguera AS tipo ON ciegos.id_tipo_ceguera = tipo.id
+                INNER JOIN
+                    usuarios AS cuidador ON ciegos.id_cuidador = cuidador.id
+                LIMIT 25;
+                """)
+            result = cursor.fetchall()
+            payload = []
+            content = {}
+            for data in result:
+                content = {
+                    'id': int(data[0]),
+                    'nombre': data[1],
+                    'genero': int(data[2]),
+                    'tipo_ceguera': int(data[3]),
+                    'nombre_cuidador': int(data[4]),
+                    'estado': bool(data[5]),
+                }
+                payload.append(content)
+                content = {}
+            json_data = jsonable_encoder(payload)
+            if result:
+                return {"resultado": json_data}
+            else:
+                raise HTTPException(
+                    status_code=404, detail="Discapacitado not found")
+
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
     # VER TODOS LOS DISCAPACITADOS
     def get_discapacitadosV_SIN_GPS(self):
         try:

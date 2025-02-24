@@ -215,7 +215,6 @@ class CiegoController():
                     genero.genero AS genero,
                     tipo.tp_ceguera AS tipo_ceguera,
                     cuidador.nombre AS nombre_cuidador,
-                    ciegos.fecha,
                     ciegos.estado AS reporte_discapacitados
                 FROM
                     ciegos
@@ -234,9 +233,9 @@ class CiegoController():
                 content = {
                     'id': int(data[0]),
                     'nombre': data[1],
-                    'genero': int(data[2]),
-                    'tipo_ceguera': int(data[3]),
-                    'nombre_cuidador': int(data[4]),
+                    'genero': data[2],
+                    'tipo_ceguera': data[3],
+                    'nombre_cuidador': data[4],
                     'estado': bool(data[5]),
                 }
                 payload.append(content)

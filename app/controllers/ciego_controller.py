@@ -215,7 +215,7 @@ class CiegoController():
                     genero.genero AS genero,
                     tipo.tp_ceguera AS tipo_ceguera,
                     cuidador.nombre AS nombre_cuidador,
-                    ciegos.estado AS reporte_discapacitados
+                    ciegos.estado AS estado
                 FROM
                     ciegos
                 INNER JOIN

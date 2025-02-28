@@ -68,3 +68,13 @@ async def delete_discapacitadoV(discapacitado_id: int):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.put("/update_estado_discapacitado/{discapacitado_id}")
+async def update_estado_discapacitado(discapacitado_id: int, discapacitadoestado: DiscapacitadoEstado):
+    try:
+        rpta = nuevo_usuario.update_estado_discapacitado(discapacitado_id, discapacitadoestado)
+        return rpta
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

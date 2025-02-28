@@ -325,3 +325,25 @@ class CiegoController():
             if conn:
                 conn.close()
 
+    def update_estado_discapacitado(self, discapacitado_id: int, discapacitadoestado: DiscapacitadoEstado):
+            try:
+                conn = get_db_connection()
+                cursor = conn.cursor()
+                cursor.execute(
+                    "UPDATE ciegos SET estado = %s WHERE id = %s",
+                    (discapacitadoestado.estado, discapacitado_id,)
+                )
+                conn.commit()
+
+                if cursor.rowcount == 0:
+                    raise HTTPException(
+                        status_code=404, detail="Discapacitado no encontrado")
+
+                return {"mensaje": "Estado del Discapacitado actualizado exitosamente"}
+
+            except mysql.connector.Error as err:
+                raise HTTPException(status_code=500, detail=str(err))
+
+            finally:
+                if conn:
+                    conn.close()

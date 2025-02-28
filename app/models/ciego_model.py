@@ -20,3 +20,6 @@ class Ciegos_Report(BaseModel):
 class CiegosReporte(BaseModel):
     fecha1: str
     fecha2: str
+
+class DiscapacitadoEstado(BaseModel):
+    estado: bool

@@ -11,6 +11,11 @@ class Dispositivo_GPS(BaseModel):
 class GPSEstado(BaseModel):
     estado: bool
 
+class ver_gps_con_Discapacitados(BaseModel):
+    id: int = None
+    numero_serie: str
+    nombre: str
+
 class ver_gps_con_Discapacitado(BaseModel):
     id: int = None
     numero_serie: str

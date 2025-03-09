@@ -192,27 +192,26 @@ class GPScontroller():
                 WHERE u.id = %s;
                 """, (gps_id,))
             result = cursor.fetchone()
-            payload = []
-            content = {}
 
-            content = {
-                "id": int(result[0]),
-                "numero_serie": result[1],
-                "nombre": result[2],
-                'estado': bool(result[4]),
-            }
-            payload.append(content)
-
-            json_data = jsonable_encoder(content)
             if result:
+                # Aquí accedemos correctamente a los datos del resultado
+                content = {
+                    "id": gps_id,
+                    "numero_serie": result[0],
+                    "nombre": result[1],
+                    "estado": bool(result[2]),
+                }
+                
+                json_data = jsonable_encoder(content)  # Serializamos el contenido a JSON
                 return json_data
             else:
-                raise HTTPException(
-                    status_code=404, detail="UnidadGPS not found")
+                raise HTTPException(status_code=404, detail="Unidad GPS no encontrada")
 
         except mysql.connector.Error as err:
             conn.rollback()
+            raise HTTPException(status_code=500, detail=f"Error en la base de datos: {err}")
         finally:
             conn.close()
+
 
     # FIN COLLARGPS

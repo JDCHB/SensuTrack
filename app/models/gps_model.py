@@ -16,6 +16,7 @@ class ver_gps_con_Discapacitados(BaseModel):
     nombre: str
 
 class ver_gps_con_Discapacitado(BaseModel):
+    id: int = None
     numero_serie: str
     nombre: str
     estado: bool

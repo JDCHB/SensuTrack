@@ -162,14 +162,14 @@ class GPScontroller():
             
             for data in result:
                 content = {
+                    'numero_serie': data[0],
                     'nombre': data[1],
-                    'numero_serie': data[2],
                 }
                 payload.append(content)
 
             json_data = jsonable_encoder(payload)
             
-            if result:
+            if payload:
                 return {"resultado": json_data}
             else:
                 raise HTTPException(status_code=404, detail="No hay discapacitados con GPS asignado")

@@ -165,6 +165,7 @@ class GPScontroller():
                     'id': data[0],
                     'numero_serie': data[1],
                     'nombre': data[2],
+                    'estado': bool(result[3]),
                 }
                 payload.append(content)
 

@@ -153,7 +153,7 @@ class GPScontroller():
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT u.id u.numero_serie, c.nombre
+                SELECT u.id, u.numero_serie, c.nombre
                 FROM unidad_gps u
                 JOIN ciegos c ON u.id_ciego_vinculado = c.id;
             """)

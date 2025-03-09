@@ -64,3 +64,13 @@ async def delete_gps(gps_id: int):
 async def get_GPS_Discapacitados():
     rpta = nueva_unidad_gps.get_GPS_Discapacitados()
     return rpta
+
+@router.get("/get_GPS_Discapacitado/{gps_id}", response_model=ver_gps_con_Discapacitado)
+async def get_GPS_Discapacitado(gps_id: int):
+    try:
+        rpta = nueva_unidad_gps.get_GPS_Discapacitado(gps_id)
+        return rpta
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

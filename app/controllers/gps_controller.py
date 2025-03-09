@@ -147,7 +147,7 @@ class GPScontroller():
             if conn:
                 conn.close()
 
-    # VER TODOS LOS DISCAPACITADOS
+    # VER TODOS LOS GPS CON DISCAPACITADOS
     def get_GPS_Discapacitados(self):
         try:
             conn = get_db_connection()
@@ -173,6 +173,42 @@ class GPScontroller():
                 return {"resultado": json_data}
             else:
                 raise HTTPException(status_code=404, detail="No hay discapacitados con GPS asignado")
+
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
+    # BUSCAR UNO DE LOS GPS CON DISCAPACITADOS
+    def get_GPS_Discapacitado(self, gps_id: int):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                SELECT u.numero_serie, c.nombre, u.estado
+                FROM unidad_gps u
+                JOIN ciegos c ON u.id_ciego_vinculado = c.id
+                WHERE u.id = %s;
+                """, (gps_id,))
+            result = cursor.fetchone()
+            payload = []
+            content = {}
+
+            content = {
+                "id": int(result[0]),
+                "numero_serie": result[1],
+                "nombre": result[2],
+                'estado': bool(result[4]),
+            }
+            payload.append(content)
+
+            json_data = jsonable_encoder(content)
+            if result:
+                return json_data
+            else:
+                raise HTTPException(
+                    status_code=404, detail="UnidadGPS not found")
 
         except mysql.connector.Error as err:
             conn.rollback()

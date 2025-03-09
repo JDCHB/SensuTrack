@@ -14,3 +14,8 @@ class GPSEstado(BaseModel):
 class ver_gps_con_Discapacitados(BaseModel):
     numero_serie: str
     nombre: str
+
+class ver_gps_con_Discapacitado(BaseModel):
+    numero_serie: str
+    nombre: str
+    estado: bool

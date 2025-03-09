@@ -153,7 +153,7 @@ class GPScontroller():
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT u.numero_serie, c.nombre
+                SELECT u.id u.numero_serie, c.nombre
                 FROM unidad_gps u
                 JOIN ciegos c ON u.id_ciego_vinculado = c.id;
             """)
@@ -162,8 +162,9 @@ class GPScontroller():
             
             for data in result:
                 content = {
-                    'numero_serie': data[0],
-                    'nombre': data[1],
+                    'id': data[0],
+                    'numero_serie': data[1],
+                    'nombre': data[2],
                 }
                 payload.append(content)
 

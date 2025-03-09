@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from app.models.gps_model import *
 from app.controllers.gps_controller import *
+from app.controllers.ciego_controller import *
 router = APIRouter()
 
 nueva_unidad_gps = GPScontroller()
@@ -58,3 +59,8 @@ async def delete_gps(gps_id: int):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/get_GPS_Discapacitado/")
+async def get_GPS_Discapacitado():
+    rpta = nueva_unidad_gps.get_GPS_Discapacitado()
+    return rpta

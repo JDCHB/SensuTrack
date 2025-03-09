@@ -148,7 +148,7 @@ class GPScontroller():
                 conn.close()
 
     # VER TODOS LOS DISCAPACITADOS
-    def get_GPS_Discapacitado(self):
+    def get_GPS_Discapacitados(self):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()

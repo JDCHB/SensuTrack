@@ -33,7 +33,3 @@ class ModuloxRol(BaseModel):
 
 class ModuloxRol_Can_See(BaseModel):
     id_rol: int = None
-
-class ver_gps(BaseModel):
-    numero_serie: str
-    nombre: str

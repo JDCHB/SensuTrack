@@ -147,4 +147,36 @@ class GPScontroller():
             if conn:
                 conn.close()
 
+    # VER TODOS LOS DISCAPACITADOS
+    def get_GPS_Discapacitado(self):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT u.numero_serie, c.nombre
+                FROM unidad_gps u
+                JOIN ciegos c ON u.id_ciego_vinculado = c.id;
+            """)
+            result = cursor.fetchall()
+            payload = []
+            
+            for data in result:
+                content = {
+                    'nombre': data[1],
+                    'numero_serie': data[2],
+                }
+                payload.append(content)
+
+            json_data = jsonable_encoder(payload)
+            
+            if result:
+                return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="No hay discapacitados con GPS asignado")
+
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
     # FIN COLLARGPS

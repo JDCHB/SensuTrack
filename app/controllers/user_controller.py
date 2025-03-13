@@ -358,7 +358,48 @@ class Usercontroller():
             if conn:
                 conn.close()  # Cerramos la conexión
 
+    def Verificar_Google_User(self, user: Google_user):   
+        try:
+            print("111111111111111", user)
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM usuarios WHERE email= %s ", (user.email,))
 
+            result = cursor.fetchone()
+
+            if result:
+                content = {}    
+                content={"Informacion":"Ya_existe", 'id':int(result[0]),'rol_v':int(result[7]), 'estado':bool(result[8]), }
+              
+                return jsonable_encoder(content)
+            else:   
+                cursor.execute("SELECT * FROM google_login where google_id = %s",(user.google_id,))
+
+                result= cursor.fetchone()
+                
+                if result:
+                    content = {}    
+                    content={"Informacion":"Ya_existe_google"}
+                    return jsonable_encoder(content)
+
+                else:
+                    print ("*--------**-/*/",user)
+                    cursor.execute("INSERT INTO usuarios (email,password,nombre,apellido,documento,telefono,id_rol,estado) VALUES (%s, %s, %s, %s, %s, %s ,%s ,%s)", (user.nombre,"ContraPredeterminada",user.nombre,user.apellido,"google_id","000000",2,0,))
+                    id=cursor.lastrowid
+                    cursor.execute("INSERT INTO google_login (id_usuario, google_id, access_token, foto, estado) VALUES (%s, %s, %s, %s,%s)",
+                               (id, user.google_id, user.access_token,user.foto,user.estado,))
+                    conn.commit()
+                   
+                    content = {}    
+                    content={"Informacion":"Registrada", 'id': id}
+                    return jsonable_encoder(content)
+
+
+        except mysql.connector.Error as err:
+            conn.rollback()
+            print(f"Error en la base de datos: {err}")  
+        finally:
+            conn.close() 
 
 
 # FIN DE LA CLASE USUARIO

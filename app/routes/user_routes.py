@@ -99,3 +99,8 @@ async def update_contraseña(user: Login):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/Verificar_Google_User")
+async def Verificar_Google_User(user: Google_user):
+    rpta = nuevo_usuario.Verificar_Google_User(user)
+    return rpta

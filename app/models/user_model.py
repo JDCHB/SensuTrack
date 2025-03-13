@@ -37,3 +37,20 @@ class UserEstado(BaseModel):
 
 class ValidarCorreo(BaseModel):
     email: str
+
+
+class Google_user(BaseModel):
+    id: int= None
+    id_usuario: int= None
+    google_id: str
+    foto: str
+    access_token: str
+    email: str
+    nombre: str
+    apellido: str
+    estado: bool
+
+
+class login_google(BaseModel):
+    verif_user: Google_user
+    user: User

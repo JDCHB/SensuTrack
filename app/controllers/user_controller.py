@@ -361,6 +361,7 @@ class Usercontroller():
     def Verificar_Google_User(self, user: Google_user):   
         try:
             print("Datos recibidos del frontendDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD:", user)
+            print("Datos recibidos del fFFFFFFFFFFFFFFFFFFFFFFFFFFFFFrontend:", user.dict())  # Imprime los datos recibidos
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM usuarios WHERE email= %s ", (user.email,))

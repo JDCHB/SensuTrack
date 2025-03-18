@@ -384,7 +384,7 @@ class Usercontroller():
 
                 else:
                     print ("*--------**-/*/",user)
-                    cursor.execute("INSERT INTO usuarios (email,password,nombre,apellido,documento,telefono,id_rol,estado) VALUES (%s, %s, %s, %s, %s, %s ,%s ,%s)", (user.email,"ContraPredeterminada",user.nombre,"APELLIDOPRUEBA","google_id","000000",2,0,))
+                    cursor.execute("INSERT INTO usuarios (email,password,nombre,apellido,documento,telefono,id_rol,estado) VALUES (%s, %s, %s, %s, %s, %s ,%s ,%s)", (user.email,"ContraPredeterminada",user.nombre,user.apellido,"google_id","000000",2,0,))
                     id=cursor.lastrowid
                     cursor.execute("INSERT INTO google_login (id_usuario, google_id, access_token, foto, estado) VALUES (%s, %s, %s, %s,%s)",
                             (id, user.google_id, user.access_token,user.foto,user.estado,))
@@ -400,7 +400,27 @@ class Usercontroller():
         finally:
             conn.close()
 
-
+    def verificar_usuario(self, user: login_google):
+            try:
+                conn = get_db_connection()
+                cursor = conn.cursor()
+                cursor.execute("SELECT * FROM google_login where google_id = %s",(user.verif_user.google_id,))
+                result = cursor.fetchone()
+                if result:
+                print("-------------")
+                return {"resultado": "usuario ya registrado"}
+                else:
+                    print("-----------------2")
+                    user_id=self.create_user(user.user)
+                    print("Usuario registrando", user_id)
+                    cursor.execute("INSERT INTO google_login (id_usuario, google_id, access_token, foto, estado) VALUES (%s, %s, %s, %s,%s)",
+                                (user_id, user.verif_user.google_id, user.verif_user.access_token,user.verif_user.foto,))
+                    return {"resultado": "usuario registrado"}             
+                    
+            except mysql.connector.Error as err:
+                conn.rollback()
+            finally:
+                conn.close()
 
 
 

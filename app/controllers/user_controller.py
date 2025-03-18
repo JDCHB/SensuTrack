@@ -360,7 +360,7 @@ class Usercontroller():
     
     def Verificar_Google_User(self, user: Google_user):   
         try:
-            print("111111111111111", user)
+            print("Datos recibidos del frontendDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD:", user)
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM usuarios WHERE email= %s ", (user.email,))

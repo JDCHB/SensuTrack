@@ -415,7 +415,7 @@ class Usercontroller():
                 print("Usuario registrando", user_id)
                 cursor.execute("INSERT INTO google_login (id_usuario, google_id, access_token, foto, estado) VALUES (%s, %s, %s, %s,%s)",
                             (user_id, user.verif_user.google_id, user.verif_user.access_token,user.verif_user.foto,))
-                    return {"resultado": "usuario registrado"}             
+                return {"resultado": "usuario registrado"}             
                     
         except mysql.connector.Error as err:
             conn.rollback()

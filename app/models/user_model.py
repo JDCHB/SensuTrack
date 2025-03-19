@@ -54,3 +54,13 @@ class Google_user(BaseModel):
 class login_google(BaseModel):
     verif_user: Google_user
     user: User
+
+class Completar_Informacion(BaseModel):
+    id: int = None
+    password: str
+    nombre: str
+    apellido: str
+    documento: str
+    telefono: str
+    id_rol: int
+    estado: bool

@@ -401,6 +401,7 @@ class Usercontroller():
         finally:
             conn.close()
 
+
     def verificar_usuario(self, user: login_google):
         try:
             conn = get_db_connection()
@@ -423,6 +424,26 @@ class Usercontroller():
         finally:
             conn.close()
 
+    def Completar_Informacion(self, user: Completar_Informacion):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT email FROM usuarios WHERE email = %s", (user.email,))
+            result = cursor.fetchall()
+
+            if result:
+                return {"resultado": "El usuario ya existe"}
+            else:   
+                cursor.execute("INSERT INTO usuarios (password,nombre,apellido,documento,telefono,id_rol,estado) VALUES (%s, %s, %s, %s, %s, %s ,%s ,%s)",
+                            (user.password, user.nombre, user.apellido, user.documento, user.telefono, user.id_rol, user.estado))
+                conn.commit()
+                return {"resultado": "Usuario creado"}
+        except mysql.connector.Error as err:
+            conn.rollback()
+            return {"error": f"Error al crear usuario: {err}"}
+        finally:
+            if conn:
+                conn.close()
 
 
     # def Verificar_Google_User(self, user: Google_user):   

@@ -104,3 +104,8 @@ async def update_contraseña(user: Login):
 async def Verificar_Google_User(user: Google_user):
     rpta = nuevo_usuario.Verificar_Google_User(user)
     return rpta
+
+@router.post("/Completar_Informacion")
+async def Completar_Informacion(user: Completar_Informacion):
+    rpta = nuevo_usuario.Completar_Informacion(user)
+    return rpta

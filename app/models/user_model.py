@@ -57,6 +57,7 @@ class login_google(BaseModel):
 
 class Completar_Informacion(BaseModel):
     id: int = None
+    email: str
     password: str
     nombre: str
     apellido: str

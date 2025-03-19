@@ -105,7 +105,6 @@ async def Verificar_Google_User(user: Google_user):
     rpta = nuevo_usuario.Verificar_Google_User(user)
     return rpta
 
-
 @router.post("/Completar_Informacion/{user_id}")
 async def Completar_Informacion(user_id: int, user: Completar_Informacion):
     try:

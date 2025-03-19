@@ -40,8 +40,8 @@ class ValidarCorreo(BaseModel):
 
 
 class Google_user(BaseModel):
-    id: Optional[int] = None
-    id_usuario: Optional[int] = None
+    id: int= None
+    id_usuario: int= None
     google_id: str
     foto: str
     access_token: str

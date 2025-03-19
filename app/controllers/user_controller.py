@@ -424,27 +424,30 @@ class Usercontroller():
         finally:
             conn.close()
 
-    def Completar_Informacion(self, user: Completar_Informacion):
+
+    def Completar_Informacion(self, user_id: int, user: Completar_Informacion):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT email FROM usuarios WHERE email = %s", (user.email,))
-            result = cursor.fetchall()
+            cursor.execute(
+                "UPDATE usuarios SET nombre = %s, apellido = %s, documento = %s, telefono = %s, estado = %s WHERE id = %s",
+                (user.nombre, user.apellido,
+                 user.documento, user.telefono, user.estado, user_id,)
+            )
+            conn.commit()
 
-            if result:
-                return {"resultado": "El usuario ya existe"}
-            else:   
-                cursor.execute("INSERT INTO usuarios (password,nombre,apellido,documento,telefono,id_rol,estado) VALUES (%s, %s, %s, %s, %s, %s ,%s ,%s)",
-                            (user.password, user.nombre, user.apellido, user.documento, user.telefono, user.id_rol, user.estado))
-                conn.commit()
-                return {"resultado": "Usuario creado"}
+            if cursor.rowcount == 0:
+                raise HTTPException(
+                    status_code=404, detail="Usuario no encontrado")
+
+            return {"mensaje": "Usuario actualizado exitosamente"}
+
         except mysql.connector.Error as err:
-            conn.rollback()
-            return {"error": f"Error al crear usuario: {err}"}
+            raise HTTPException(status_code=500, detail=str(err))
+
         finally:
             if conn:
                 conn.close()
-
 
     # def Verificar_Google_User(self, user: Google_user):   
     #     try:

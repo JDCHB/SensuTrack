@@ -105,7 +105,13 @@ async def Verificar_Google_User(user: Google_user):
     rpta = nuevo_usuario.Verificar_Google_User(user)
     return rpta
 
-@router.post("/Completar_Informacion")
-async def Completar_Informacion(user: Completar_Informacion):
-    rpta = nuevo_usuario.Completar_Informacion(user)
-    return rpta
+
+@router.post("/Completar_Informacion/{user_id}")
+async def Completar_Informacion(user_id: int, user: Completar_Informacion):
+    try:
+        rpta = nuevo_usuario.update_user(user_id, user)
+        return rpta
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

@@ -360,8 +360,8 @@ class Usercontroller():
     
     def Verificar_Google_User(self, user: Google_user):   
         try:
-            print("Datos recibidos del frontendDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD:", user)
-            print("Datos recibidos del fFFFFFFFFFFFFFFFFFFFFFFFFFFFFFrontend:", user.dict())  # Imprime los datos recibidos
+            print("Llegó a Verificar_Google_User")  # Mensaje de depuración
+            print("Datos recibidos del frontend:", user.dict())  # Mensaje de depuración
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM usuarios WHERE email= %s ", (user.email,))
@@ -396,6 +396,7 @@ class Usercontroller():
 
         except mysql.connector.Error as err:
             conn.rollback()
+            print("Error en Verificar_Google_User:", str(err))  # Mensaje de depuración
             print(f"Error en la base de datos: {err}")  
         finally:
             conn.close()

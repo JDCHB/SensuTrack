@@ -387,8 +387,7 @@ class Usercontroller():
                     print ("*--------**-/*/",user)
                     cursor.execute("INSERT INTO usuarios (email,password,nombre,apellido,documento,telefono,id_rol,estado) VALUES (%s, %s, %s, %s, %s, %s ,%s ,%s)", (user.email,"ContraPredeterminada",user.nombre,user.apellido,"google_id","000000",2,0,))
                     id=cursor.lastrowid
-                    cursor.execute("INSERT INTO google_login (id_usuario, google_id, access_token, foto, estado) VALUES (%s, %s, %s, %s,%s)",
-                            (id, user.google_id, user.access_token,user.foto,user.estado,))
+                    cursor.execute("INSERT INTO google_login (id_usuario, google_id, access_token, foto, estado) VALUES (%s, %s, %s, %s,%s)", (id, user.google_id, user.access_token,user.foto,user.estado,))
                     conn.commit()
                 
                     content = {}    

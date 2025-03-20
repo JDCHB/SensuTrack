@@ -108,7 +108,7 @@ async def Verificar_Google_User(user: Google_user):
 @router.put("/Completar_Informacion/{user_id}")
 async def Completar_Informacion(user_id: int, user: Completar_Informacion):
     try:
-        rpta = nuevo_usuario.update_user(user_id, user)
+        rpta = nuevo_usuario.Completar_Informacion(user_id, user)
         return rpta
     except HTTPException as e:
         raise e

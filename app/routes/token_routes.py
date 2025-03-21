@@ -25,7 +25,7 @@ async def generate_token_google(user: User_token):
     return rpta
 
 
-@router.post("/verify_token")
-async def verify_token(token: Token):
-    rpta = nuevo_usuario.verify_token(token)
-    return rpta
+# @router.post("/verify_token")
+# async def verify_token(token: Token):
+#     rpta = nuevo_usuario.verify_token(token)
+#     return rpta

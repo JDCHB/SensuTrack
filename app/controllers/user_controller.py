@@ -248,6 +248,11 @@ class Usercontroller():
     # ACTUALIZAR USUARIO
     def update_user(self, user_id: int, user: UPDATE_User):
         try:
+
+            # Validar que `estado` sea un valor booleano
+            if not isinstance(user.estado, bool):
+                raise HTTPException(status_code=422, detail="El campo estado debe ser un valor booleano.")
+
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(

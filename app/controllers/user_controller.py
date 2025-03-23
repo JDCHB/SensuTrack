@@ -246,7 +246,36 @@ class Usercontroller():
             conn.close()
 
     # ACTUALIZAR USUARIO
-    def update_user(self, user_id: int, user: UPDATE_User):
+    def update_user(self, user_id: int, user: User):
+        try:
+
+            # Validar que `estado` sea un valor booleano
+            if not isinstance(user.estado, bool):
+                raise HTTPException(status_code=422, detail="El campo estado debe ser un valor booleano.")
+
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute(
+                "UPDATE usuarios SET email = %s, password = %s, nombre = %s, apellido = %s, documento = %s, telefono = %s, estado = %s WHERE id = %s",
+                (user.email, user.password, user.nombre, user.apellido,
+                 user.documento, user.telefono, user.estado, user_id,)
+            )
+            conn.commit()
+
+            if cursor.rowcount == 0:
+                raise HTTPException(
+                    status_code=404, detail="Usuario no encontrado")
+
+            return {"mensaje": "Usuario actualizado exitosamente"}
+
+        except mysql.connector.Error as err:
+            raise HTTPException(status_code=500, detail=str(err))
+
+        finally:
+            if conn:
+                conn.close()
+
+    def update_user_admin(self, user_id: int, user: UPDATE_User):
         try:
 
             # Validar que `estado` sea un valor booleano

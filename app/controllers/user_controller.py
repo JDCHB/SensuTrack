@@ -36,6 +36,10 @@ class Usercontroller():
             )
             result = cursor.fetchone()
 
+            # Si el usuario está desactivado
+            if estado != 1:
+                raise HTTPException(status_code=403, detail="Tu cuenta ha sido desactivada. Contacta al soporte.")
+
             if result:
                 # Generar token
                 access_token_expires = timedelta(minutes=60)
@@ -61,7 +65,7 @@ class Usercontroller():
                 }
             else:
                 raise HTTPException(
-                    status_code=401, detail="Cuenta desactivada, por favor contacte con Soporte.")
+                    status_code=401, detail="Credenciales incorrectas")
 
         except mysql.connector.Error as err:
             conn.rollback()

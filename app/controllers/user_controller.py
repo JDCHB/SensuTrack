@@ -61,7 +61,7 @@ class Usercontroller():
                 }
             else:
                 raise HTTPException(
-                    status_code=401, detail="Credenciales incorrectas")
+                    status_code=401, detail="Cuenta desactivada, por favor contacte con Soporte.")
 
         except mysql.connector.Error as err:
             conn.rollback()

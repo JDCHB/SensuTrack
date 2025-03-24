@@ -31,7 +31,7 @@ class Usercontroller():
 
             # Consulta para validar usuario y obtener sus datos
             cursor.execute(
-                "SELECT id, email, password, id_rol FROM usuarios WHERE email = %s AND password = %s",
+                "SELECT id, email, password, id_rol FROM usuarios WHERE email = %s AND password = %s AND estado!=0",
                 (user.email, user.password)
             )
             result = cursor.fetchone()

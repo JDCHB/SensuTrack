@@ -23,56 +23,102 @@ class Usercontroller():
 
     # GENERAR EL TOKEN
 
+
     async def login_generate_token(self, user: Login):
         try:
-
             conn = get_db_connection()
             cursor = conn.cursor()
 
             # Consulta para validar usuario y obtener sus datos
             cursor.execute(
-                "SELECT id, email, password, id_rol FROM usuarios WHERE email = %s AND password = %s AND estado!=0",
+                "SELECT id, email, password, id_rol, estado FROM usuarios WHERE email = %s AND password = %s",
                 (user.email, user.password)
             )
             result = cursor.fetchone()
 
-            # Si el usuario está desactivado
+            if not result:
+                raise HTTPException(status_code=401, detail="Credenciales incorrectas")
+
+            # Extraer estado
+            usuario_id, email, password, id_rol, estado = result
+
+            # Verificar si la cuenta está desactivada
             if estado != 1:
-                raise HTTPException(status_code=403, detail="Tu cuenta ha sido desactivada. Contacta al soporte.")
+                raise HTTPException(status_code=403, detail="Tu cuenta ha sido desactivada. Contacta al soporte de SensuTrack.")
 
-            if result:
-                # Generar token
-                access_token_expires = timedelta(minutes=60)
-                access_token = self.create_access_token(
-                    # Usa el email como "sub" en el token
-                    data={"sub": result[1]},
-                    expires_delta=access_token_expires
-                )
+            # Generar token
+            access_token_expires = timedelta(minutes=60)
+            access_token = self.create_access_token(
+                data={"sub": email},
+                expires_delta=access_token_expires
+            )
 
-                # Preparar los datos del usuario
-                user_data = {
-                    "id": result[0],
-                    "email": result[1],
-                    "id_rol": result[3]
-                }
+            # Preparar los datos del usuario
+            user_data = {
+                "id": usuario_id,
+                "email": email,
+                "id_rol": id_rol
+            }
 
-                # Retornar token y datos del usuario
-                return {
-                    "access_token": access_token,
-                    "token_type": "bearer",
-                    # Convertir a JSON seguro
-                    "user_data": jsonable_encoder(user_data)
-                }
-            else:
-                raise HTTPException(
-                    status_code=401, detail="Credenciales incorrectas")
+            return {
+                "access_token": access_token,
+                "token_type": "bearer",
+                "user_data": jsonable_encoder(user_data)
+            }
 
         except mysql.connector.Error as err:
             conn.rollback()
-            raise HTTPException(
-                status_code=500, detail="Error interno en la base de datos")
+            raise HTTPException(status_code=500, detail="Error interno en la base de datos")
         finally:
             conn.close()
+
+
+    # async def login_generate_token(self, user: Login):
+    #     try:
+
+    #         conn = get_db_connection()
+    #         cursor = conn.cursor()
+
+    #         # Consulta para validar usuario y obtener sus datos
+    #         cursor.execute(
+    #             "SELECT id, email, password, id_rol FROM usuarios WHERE email = %s AND password = %s AND estado!=0",
+    #             (user.email, user.password)
+    #         )
+    #         result = cursor.fetchone()
+    
+    #         if result:
+    #             # Generar token
+    #             access_token_expires = timedelta(minutes=60)
+    #             access_token = self.create_access_token(
+    #                 # Usa el email como "sub" en el token
+    #                 data={"sub": result[1]},
+    #                 expires_delta=access_token_expires
+    #             )
+
+    #             # Preparar los datos del usuario
+    #             user_data = {
+    #                 "id": result[0],
+    #                 "email": result[1],
+    #                 "id_rol": result[3]
+    #             }
+
+    #             # Retornar token y datos del usuario
+    #             return {
+    #                 "access_token": access_token,
+    #                 "token_type": "bearer",
+    #                 # Convertir a JSON seguro
+    #                 "user_data": jsonable_encoder(user_data)
+    #             }
+    #         else:
+    #             raise HTTPException(
+    #                 status_code=401, detail="Credenciales incorrectas")
+
+    #     except mysql.connector.Error as err:
+    #         conn.rollback()
+    #         raise HTTPException(
+    #             status_code=500, detail="Error interno en la base de datos")
+    #     finally:
+    #         conn.close()
 
     # VERIFICAR EL TOKEN
 

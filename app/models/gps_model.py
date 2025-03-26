@@ -17,3 +17,6 @@ class ver_gps_con_Discapacitado(BaseModel):
     numero_serie: str
     nombre: str
     estado: bool
+
+class get_serial_bateria_GPS(BaseModel):
+    documento: str

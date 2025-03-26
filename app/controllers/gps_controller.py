@@ -216,4 +216,35 @@ class GPScontroller():
             conn.close()
 
 
+    def get_Serial_GPS(self, serial: get_serial_bateria_GPS):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute(
+                """SELECT ug.numero_serie, ug.nivel_bateria FROM unidad_gps AS ug
+                    INNER JOIN ciegos AS ci ON ug.id_ciego_vinculado = ci.id
+                    INNER JOIN usuarios AS usu ON ci.id_cuidador = usu.id
+                    WHERE usu.documento = %s""", (serial.documento,))
+            result = cursor.fetchone()
+            payload = []
+            content = {}
+
+            content = {
+                "numero_serie": int(result[0]),
+                "nivel_bateria": int(result[1]),
+            }
+            payload.append(content)
+
+            json_data = jsonable_encoder(content)
+            if result:
+                return json_data
+            else:
+                raise HTTPException(
+                    status_code=404, detail="Discapacitado not found")
+
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
     # FIN COLLARGPS

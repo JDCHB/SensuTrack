@@ -230,7 +230,7 @@ class GPScontroller():
             content = {}
 
             content = {
-                "numero_serie": int(result[0]),
+                "numero_serie": result[0],
                 "nivel_bateria": int(result[1]),
             }
             payload.append(content)

@@ -76,6 +76,6 @@ async def get_GPS_Discapacitado(gps_id: int):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/get_Serial_GPS")
-async def get_Serial_GPS():
-    rpta = nueva_unidad_gps.get_Serial_GPS()
+async def get_Serial_GPS(serial: get_serial_bateria_GPS):
+    rpta = nueva_unidad_gps.get_Serial_GPS(serial)
     return rpta

@@ -2,7 +2,7 @@ import mysql.connector
 from fastapi import HTTPException
 from app.config.db_config import get_db_connection
 from app.models.ciego_model import *
-from app.models.ciego_map_model import CiegosMap
+from app.models.ciego_map_model import *
 from fastapi.encoders import jsonable_encoder
 
 
@@ -63,6 +63,21 @@ class CiegoController():
             raise HTTPException(
                 status_code=500, detail="Error en la base de datos")
 
+        finally:
+            conn.close()
+
+    #CREATE ZONAS SEGURAS
+    def create_Zona_Segura(self, ciegozonas: CiegoZonaS):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO zonas_seguras (nombre_zona, latitud, longitud, id_discapacitado, estado) VALUES (%s, %s, %s, %s, %s)",
+                           (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, ciegozonas.id_discapacitado, ciegozonas.estado))
+            conn.commit()
+            conn.close()
+            return {"resultado": "Zona Segura Registrada Exitosamente"}
+        except mysql.connector.Error as err:
+            conn.rollback()
         finally:
             conn.close()
 

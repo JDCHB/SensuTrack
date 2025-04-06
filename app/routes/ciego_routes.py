@@ -13,6 +13,10 @@ async def Ciegos_Map(mascotamap: CiegosMap):
     rpta = nuevo_discapacitado.Ciegos_Map(mascotamap)
     return rpta
 
+@router.post("/create_Zona_Segura")
+async def create_Zona_Segura(ciegozonas: CiegoZonaS):
+    rpta = nuevo_discapacitado.create_Zona_Segura(ciegozonas)
+    return rpta
 
 @router.post("/Ciegos_Report")
 async def Ciegos_Report(ciegosreporte: CiegosReporte):

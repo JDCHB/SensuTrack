@@ -14,6 +14,7 @@ class CiegoController():
             cursor = conn.cursor()
             cursor.execute(
                 """SELECT 
+                    d.id,
                     d.nombre AS nombre_discapacitado, 
                     c.latitud, 
                     c.longitud, 
@@ -39,11 +40,12 @@ class CiegoController():
             # Recorremos cada fila de los resultados
             for data in result:
                 content = {
-                    'nombre_discapacitado': data[0],
-                    'latitud': data[1],
-                    'longitud': data[2],
-                    'numero_serie': data[3],
-                    'nivel_bateria': data[4]
+                    'id': data[0],
+                    'nombre_discapacitado': data[1],
+                    'latitud': data[2],
+                    'longitud': data[3],
+                    'numero_serie': data[4],
+                    'nivel_bateria': data[5]
                 }
                 payload.append(content)
 

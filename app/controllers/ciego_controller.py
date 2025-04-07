@@ -123,6 +123,23 @@ class CiegoController():
             conn.close()
 
 
+    def delete_Zona_Segura(self, zona_id: int):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute(
+                "DELETE FROM zonas_seguras WHERE id = %s", (zona_id,))
+            conn.commit()
+            if cursor.rowcount == 0:
+                raise HTTPException(
+                    status_code=404, detail="Zona Segura no encontrada")
+            return {"mensaje": "Zona Segura eliminada exitosamente"}
+        except mysql.connector.Error as err:
+            raise HTTPException(status_code=500, detail=str(err))
+        finally:
+            if conn:
+                conn.close()
+
     # CIEGOS REPORTE
     def Ciegos_Report(self, ciegosreporte: CiegosReporte):
         try:

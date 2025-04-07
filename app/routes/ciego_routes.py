@@ -29,6 +29,16 @@ async def get_Zona_Segura(discapacitado_id: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.delete("/delete_Zona_Segura/{zona_id}")
+async def delete_Zona_Segura(zona_id: int):
+    try:
+        rpta = nuevo_discapacitado.delete_Zona_Segura(zona_id)
+        return rpta
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.post("/Ciegos_Report")
 async def Ciegos_Report(ciegosreporte: CiegosReporte):
     rpta = nuevo_discapacitado.Ciegos_Report(ciegosreporte)

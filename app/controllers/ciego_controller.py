@@ -81,6 +81,47 @@ class CiegoController():
         finally:
             conn.close()
 
+    #GET ZONAS SEGURAS POR DISCAPACITADO
+    def get_Zona_Segura(self, discapacitado_id: int):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute(
+                """SELECT 
+                    zs.id, 
+                    zs.nombre_zona, 
+                    zs.latitud, 
+                    zs.longitud,
+                    zs.id_discapacitado,
+                    zs.estado
+                FROM zonas_seguras AS zs 
+                WHERE id_discapacitado = %s""", (discapacitado_id,))
+            result = cursor.fetchone()
+            payload = []
+            content = {}
+
+            content = {
+                "id": int(result[0]),
+                "nombre_zona": result[1],
+                "latitud": result[2],
+                "longitud": result[3],
+                "id_discapacitado": int(result[4]),
+                'estado': bool(result[5]),
+            }
+            payload.append(content)
+
+            json_data = jsonable_encoder(content)
+            if result:
+                return json_data
+            else:
+                raise HTTPException(
+                    status_code=404, detail="Zona segura not found")
+
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
     # CIEGOS REPORTE
     def Ciegos_Report(self, ciegosreporte: CiegosReporte):
         try:

@@ -96,31 +96,32 @@ class CiegoController():
                     zs.estado
                 FROM zonas_seguras AS zs 
                 WHERE id_discapacitado = %s""", (discapacitado_id,))
-            result = cursor.fetchone()
+            
+            results = cursor.fetchall()
             payload = []
-            content = {}
 
-            content = {
-                "id": int(result[0]),
-                "nombre_zona": result[1],
-                "latitud": result[2],
-                "longitud": result[3],
-                "id_discapacitado": int(result[4]),
-                'estado': bool(result[5]),
-            }
-            payload.append(content)
+            for row in results:
+                content = {
+                    "id": int(row[0]),
+                    "nombre_zona": row[1],
+                    "latitud": row[2],
+                    "longitud": row[3],
+                    "id_discapacitado": int(row[4]),
+                    'estado': bool(row[5]),
+                }
+                payload.append(content)
 
-            json_data = jsonable_encoder(content)
-            if result:
-                return json_data
+            if results:
+                return jsonable_encoder(payload)
             else:
-                raise HTTPException(
-                    status_code=404, detail="Zona segura not found")
+                raise HTTPException(status_code=404, detail="Zonas seguras no encontradas")
 
         except mysql.connector.Error as err:
             conn.rollback()
+            raise HTTPException(status_code=500, detail=str(err))
         finally:
             conn.close()
+
 
     # CIEGOS REPORTE
     def Ciegos_Report(self, ciegosreporte: CiegosReporte):

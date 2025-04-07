@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from app.models.ciego_model import *
 from app.models.ciego_map_model import *
 from app.controllers.ciego_controller import *
+from typing import List
 
 router = APIRouter()
 
@@ -18,7 +19,7 @@ async def create_Zona_Segura(ciegozonas: CiegoZonaS):
     rpta = nuevo_discapacitado.create_Zona_Segura(ciegozonas)
     return rpta
 
-@router.get("/get_Zona_Segura/{discapacitado_id}", response_model=CiegoZonaS)
+@router.get("/get_Zona_Segura/{discapacitado_id}", response_model=List[CiegoZonaS])
 async def get_Zona_Segura(discapacitado_id: int):
     try:
         rpta = nuevo_discapacitado.get_Zona_Segura(discapacitado_id)

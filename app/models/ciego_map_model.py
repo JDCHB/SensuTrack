@@ -5,6 +5,7 @@ class CiegosMap(BaseModel):
     user_id: int
 
 class CiegoZonaS(BaseModel):
+    id: int = None
     nombre_zona: str
     latitud: str
     longitud: str

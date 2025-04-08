@@ -19,10 +19,20 @@ async def create_Zona_Segura(ciegozonas: CiegoZonaS):
     rpta = nuevo_discapacitado.create_Zona_Segura(ciegozonas)
     return rpta
 
-@router.get("/get_Zona_Segura/{discapacitado_id}", response_model=List[CiegoZonaS])
-async def get_Zona_Segura(discapacitado_id: int):
+@router.get("/get_Zona_Segura/{zona_id}", response_model=List[CiegoZonaS])
+async def get_Zona_Segura(zona_id: int):
     try:
-        rpta = nuevo_discapacitado.get_Zona_Segura(discapacitado_id)
+        rpta = nuevo_discapacitado.get_Zona_Segura(zona_id)
+        return rpta
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.put("/update_Zona_Segura/{zona_id}")
+async def update_Zona_Segura(zona_id: int, ciegozonas: CiegoZonaS):
+    try:
+        rpta = nuevo_discapacitado.update_Zona_Segura(zona_id, ciegozonas)
         return rpta
     except HTTPException as e:
         raise e

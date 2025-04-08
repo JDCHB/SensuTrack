@@ -82,7 +82,7 @@ class CiegoController():
             conn.close()
 
     #GET ZONAS SEGURAS POR DISCAPACITADO
-    def get_Zona_Segura(self, discapacitado_id: int):
+    def get_Zona_Segura(self, zona_id: int):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
@@ -95,7 +95,7 @@ class CiegoController():
                     zs.id_discapacitado,
                     zs.estado
                 FROM zonas_seguras AS zs 
-                WHERE id_discapacitado = %s""", (discapacitado_id,))
+                WHERE id_discapacitado = %s""", (zona_id,))
             
             results = cursor.fetchall()
             payload = []
@@ -121,6 +121,24 @@ class CiegoController():
             raise HTTPException(status_code=500, detail=str(err))
         finally:
             conn.close()
+
+    # ACTUALIZAR ZONA SEGURA
+    def update_Zona_Segura(self, zona_id: int, ciegozonas: CiegoZonaS):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("UPDATE zonas_seguras SET latitud = %s, longitud = %s WHERE id = %s",
+                           (ciegozonas.latitud, ciegozonas.longitud, zona_id))
+            conn.commit()
+            if cursor.rowcount == 0:
+                raise HTTPException(
+                    status_code=404, detail="Zona Segura not found")
+            return {"mensaje": "La Zona Segura fue actualizada exitosamente"}
+        except mysql.connector.Error as err:
+            raise HTTPException(status_code=500, detail=str(err))
+        finally:
+            if conn:
+                conn.close()
 
 
     def delete_Zona_Segura(self, zona_id: int):

@@ -13,7 +13,7 @@ class CiegoZonaS(BaseModel):
     estado: bool
 
 class CiegoZonaSUPDATE(BaseModel):
-    id: int
+    id: int = None
     nombre_zona: str
     latitud: str
     longitud: str

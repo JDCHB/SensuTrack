@@ -107,8 +107,9 @@ class CiegoController():
                     "nombre_zona": row[1],
                     "latitud": row[2],
                     "longitud": row[3],
-                    "id_discapacitado": int(row[4]),
-                    'estado': bool(row[5]),
+                    "radio": float(row[4]),
+                    "id_discapacitado": int(row[5]),
+                    'estado': bool(row[6]),
                 }
                 payload.append(content)
 

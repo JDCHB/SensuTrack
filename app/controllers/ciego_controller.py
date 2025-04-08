@@ -92,6 +92,7 @@ class CiegoController():
                     zs.nombre_zona, 
                     zs.latitud, 
                     zs.longitud,
+                    zs.radio,
                     zs.id_discapacitado,
                     zs.estado
                 FROM zonas_seguras AS zs 

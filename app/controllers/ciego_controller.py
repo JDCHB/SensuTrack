@@ -127,8 +127,8 @@ class CiegoController():
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("UPDATE zonas_seguras SET nombre_zona = %s, latitud = %s, longitud = %s WHERE id = %s",
-                           (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, zona_id))
+            cursor.execute("UPDATE zonas_seguras SET nombre_zona = %s, latitud = %s, longitud = %s, radio = %s WHERE id = %s",
+                           (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, ciegozonas.radio, zona_id))
             conn.commit()
             if cursor.rowcount == 0:
                 raise HTTPException(

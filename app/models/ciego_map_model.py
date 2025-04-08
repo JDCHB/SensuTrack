@@ -14,5 +14,6 @@ class CiegoZonaS(BaseModel):
 
 class CiegoZonaSUPDATE(BaseModel):
     id: int
+    nombre_zona: str
     latitud: str
     longitud: str

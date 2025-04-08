@@ -9,6 +9,7 @@ class CiegoZonaS(BaseModel):
     nombre_zona: str
     latitud: str
     longitud: str
+    radio: str
     id_discapacitado: int
     estado: bool
 

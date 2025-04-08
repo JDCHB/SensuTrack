@@ -71,8 +71,8 @@ class CiegoController():
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO zonas_seguras (nombre_zona, latitud, longitud, id_discapacitado, estado) VALUES (%s, %s, %s, %s, %s)",
-                           (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, ciegozonas.id_discapacitado, ciegozonas.estado))
+            cursor.execute("INSERT INTO zonas_seguras (nombre_zona, latitud, longitud, radio, id_discapacitado, estado) VALUES (%s, %s, %s, %s, %s)",
+                           (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, ciegozonas.radio, ciegozonas.id_discapacitado, ciegozonas.estado))
             conn.commit()
             conn.close()
             return {"resultado": "Zona Segura Registrada Exitosamente"}

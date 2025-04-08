@@ -158,6 +158,30 @@ class CiegoController():
             if conn:
                 conn.close()
 
+    
+    def update_estado_Zona_Segura(self, zona_id: int, ciegozonas: CiegoZonaSESTADO):
+            try:
+                conn = get_db_connection()
+                cursor = conn.cursor()
+                cursor.execute(
+                    "UPDATE zonas_seguras SET estado = %s WHERE id = %s",
+                    (ciegozonas.estado, zona_id,)
+                )
+                conn.commit()
+
+                if cursor.rowcount == 0:
+                    raise HTTPException(
+                        status_code=404, detail="Zona Segura no encontrada")
+
+                return {"mensaje": "Estado de la zona segura actualizada exitosamente"}
+
+            except mysql.connector.Error as err:
+                raise HTTPException(status_code=500, detail=str(err))
+
+            finally:
+                if conn:
+                    conn.close()
+
     # CIEGOS REPORTE
     def Ciegos_Report(self, ciegosreporte: CiegosReporte):
         try:

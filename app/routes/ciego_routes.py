@@ -29,6 +29,16 @@ async def get_Zona_Segura(zona_id: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.put("/update_estado_Zona_Segura/{zona_id}")
+async def update_estado_Zona_Segura(zona_id: int, ciegozonas: CiegoZonaSESTADO):
+    try:
+        rpta = nuevo_discapacitado.update_estado_Zona_Segura(zona_id, ciegozonas)
+        return rpta
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.put("/update_Zona_Segura/{zona_id}")
 async def update_Zona_Segura(zona_id: int, ciegozonas: CiegoZonaSUPDATE):
     try:

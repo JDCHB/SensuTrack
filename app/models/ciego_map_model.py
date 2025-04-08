@@ -17,3 +17,6 @@ class CiegoZonaSUPDATE(BaseModel):
     nombre_zona: str
     latitud: str
     longitud: str
+
+class CiegoZonaSESTADO(BaseModel):
+    estado: bool

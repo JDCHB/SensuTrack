@@ -123,7 +123,7 @@ class CiegoController():
             conn.close()
 
     # ACTUALIZAR ZONA SEGURA
-    def update_Zona_Segura(self, zona_id: int, ciegozonas: CiegoZonaS):
+    def update_Zona_Segura(self, zona_id: int, ciegozonas: CiegoZonaSUPDATE):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()

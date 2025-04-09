@@ -123,22 +123,22 @@ class CiegoController():
             conn.close()
 
     # ACTUALIZAR ZONA SEGURA
-    def update_Zona_Segura(self, zona_id: int, ciegozonas: CiegoZonaSUPDATE):
-        try:
-            conn = get_db_connection()
-            cursor = conn.cursor()
-            cursor.execute("UPDATE zonas_seguras SET nombre_zona = %s, latitud = %s, longitud = %s WHERE id = %s",
-                           (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, zona_id))
-            conn.commit()
-            if cursor.rowcount == 0:
-                raise HTTPException(
-                    status_code=404, detail="Zona Segura not found")
-            return {"mensaje": "La Zona Segura fue actualizada exitosamente"}
-        except mysql.connector.Error as err:
-            raise HTTPException(status_code=500, detail=str(err))
-        finally:
-            if conn:
-                conn.close()
+    # def update_Zona_Segura(self, zona_id: int, ciegozonas: CiegoZonaSUPDATE):
+    #     try:
+    #         conn = get_db_connection()
+    #         cursor = conn.cursor()
+    #         cursor.execute("UPDATE zonas_seguras SET nombre_zona = %s, latitud = %s, longitud = %s WHERE id = %s",
+    #                        (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, zona_id))
+    #         conn.commit()
+    #         if cursor.rowcount == 0:
+    #             raise HTTPException(
+    #                 status_code=404, detail="Zona Segura not found")
+    #         return {"mensaje": "La Zona Segura fue actualizada exitosamente"}
+    #     except mysql.connector.Error as err:
+    #         raise HTTPException(status_code=500, detail=str(err))
+    #     finally:
+    #         if conn:
+    #             conn.close()
 
 
     def delete_Zona_Segura(self, zona_id: int):

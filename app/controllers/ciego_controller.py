@@ -71,8 +71,8 @@ class CiegoController():
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO zonas_seguras (nombre_zona, latitud, longitud, id_discapacitado, estado) VALUES (%s, %s, %s, %s, %s)",
-                           (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, ciegozonas.id_discapacitado, ciegozonas.estado))
+            cursor.execute("INSERT INTO zonas_seguras (nombre_zona, latitud, longitud, radio, id_discapacitado, estado) VALUES (%s, %s, %s, %s, %s, %s)",
+                           (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, ciegozonas.radio, ciegozonas.id_discapacitado, ciegozonas.estado))
             conn.commit()
             conn.close()
             return {"resultado": "Zona Segura Registrada Exitosamente"}
@@ -92,6 +92,7 @@ class CiegoController():
                     zs.nombre_zona, 
                     zs.latitud, 
                     zs.longitud,
+                    zs.radio,
                     zs.id_discapacitado,
                     zs.estado
                 FROM zonas_seguras AS zs 
@@ -106,8 +107,9 @@ class CiegoController():
                     "nombre_zona": row[1],
                     "latitud": row[2],
                     "longitud": row[3],
-                    "id_discapacitado": int(row[4]),
-                    'estado': bool(row[5]),
+                    "radio": float(row[4]),
+                    "id_discapacitado": int(row[5]),
+                    'estado': bool(row[6]),
                 }
                 payload.append(content)
 
@@ -127,8 +129,8 @@ class CiegoController():
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("UPDATE zonas_seguras SET nombre_zona = %s, latitud = %s, longitud = %s WHERE id = %s",
-                           (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, zona_id))
+            cursor.execute("UPDATE zonas_seguras SET nombre_zona = %s, latitud = %s, longitud = %s, radio = %s WHERE id = %s",
+                           (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, ciegozonas.radio, zona_id))
             conn.commit()
             if cursor.rowcount == 0:
                 raise HTTPException(

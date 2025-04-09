@@ -71,8 +71,8 @@ class CiegoController():
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO zonas_seguras (nombre_zona, latitud, longitud, radio, id_discapacitado, estado) VALUES (%s, %s, %s, %s, %s)",
-                           (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, ciegozonas.radio, ciegozonas.id_discapacitado, ciegozonas.estado))
+            cursor.execute("INSERT INTO zonas_seguras (nombre_zona, latitud, longitud, id_discapacitado, estado) VALUES (%s, %s, %s, %s, %s)",
+                           (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, ciegozonas.id_discapacitado, ciegozonas.estado))
             conn.commit()
             conn.close()
             return {"resultado": "Zona Segura Registrada Exitosamente"}
@@ -92,7 +92,6 @@ class CiegoController():
                     zs.nombre_zona, 
                     zs.latitud, 
                     zs.longitud,
-                    zs.radio,
                     zs.id_discapacitado,
                     zs.estado
                 FROM zonas_seguras AS zs 
@@ -107,9 +106,8 @@ class CiegoController():
                     "nombre_zona": row[1],
                     "latitud": row[2],
                     "longitud": row[3],
-                    "radio": float(row[4]),
-                    "id_discapacitado": int(row[5]),
-                    'estado': bool(row[6]),
+                    "id_discapacitado": int(row[4]),
+                    'estado': bool(row[5]),
                 }
                 payload.append(content)
 
@@ -129,8 +127,8 @@ class CiegoController():
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("UPDATE zonas_seguras SET nombre_zona = %s, latitud = %s, longitud = %s, radio = %s WHERE id = %s",
-                           (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, ciegozonas.radio, zona_id))
+            cursor.execute("UPDATE zonas_seguras SET nombre_zona = %s, latitud = %s, longitud = %s WHERE id = %s",
+                           (ciegozonas.nombre_zona, ciegozonas.latitud, ciegozonas.longitud, zona_id))
             conn.commit()
             if cursor.rowcount == 0:
                 raise HTTPException(
@@ -161,28 +159,28 @@ class CiegoController():
                 conn.close()
 
     
-    def update_estado_Zona_Segura(self, zona_id: int, ciegozonas: CiegoZonaSESTADO):
-            try:
-                conn = get_db_connection()
-                cursor = conn.cursor()
-                cursor.execute(
-                    "UPDATE zonas_seguras SET estado = %s WHERE id = %s",
-                    (ciegozonas.estado, zona_id,)
-                )
-                conn.commit()
+    # def update_estado_Zona_Segura(self, zona_id: int, ciegozonas: CiegoZonaSESTADO):
+    #         try:
+    #             conn = get_db_connection()
+    #             cursor = conn.cursor()
+    #             cursor.execute(
+    #                 "UPDATE zonas_seguras SET estado = %s WHERE id = %s",
+    #                 (ciegozonas.estado, zona_id,)
+    #             )
+    #             conn.commit()
 
-                if cursor.rowcount == 0:
-                    raise HTTPException(
-                        status_code=404, detail="Zona Segura no encontrada")
+    #             if cursor.rowcount == 0:
+    #                 raise HTTPException(
+    #                     status_code=404, detail="Zona Segura no encontrada")
 
-                return {"mensaje": "Estado de la zona segura actualizada exitosamente"}
+    #             return {"mensaje": "Estado de la zona segura actualizada exitosamente"}
 
-            except mysql.connector.Error as err:
-                raise HTTPException(status_code=500, detail=str(err))
+    #         except mysql.connector.Error as err:
+    #             raise HTTPException(status_code=500, detail=str(err))
 
-            finally:
-                if conn:
-                    conn.close()
+    #         finally:
+    #             if conn:
+    #                 conn.close()
 
     # CIEGOS REPORTE
     def Ciegos_Report(self, ciegosreporte: CiegosReporte):

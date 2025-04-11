@@ -15,8 +15,8 @@ class NuevoModulo(BaseModel):
     nombre: str
     descripcion: str
     ubicacion: str
-    estado: bool
     estilo: str
+    estado: bool
 
 
 class Actualizar_Estado_Modulo(BaseModel):

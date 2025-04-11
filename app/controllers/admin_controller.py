@@ -70,8 +70,8 @@ class AdminController():
                 'nombre': result[1],
                 'descripcion': result[2],
                 'ubicacion': result[3],
-                'estado': bool(result[4]),
-                'estilo': result[5],
+                'estilo': result[4],
+                'estado': bool(result[5]),
             }
             payload.append(content)
 
@@ -104,8 +104,8 @@ class AdminController():
                     'nombre': data[1],
                     'descripcion': data[2],
                     'ubicacion': data[3],
-                    'estado': bool(data[4]),
-                    'estilo': data[5],
+                    'estilo': data[4],
+                    'estado': bool(data[5]),
                 }
                 payload.append(content)
                 content = {}
@@ -127,9 +127,9 @@ class AdminController():
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(
-                "UPDATE modulo SET nombre = %s, descripcion = %s, ubicacion=%s, estado = %s, estilo = %s WHERE id = %s",
-                (nuevomodulo.nombre, nuevomodulo.descripcion,
-                 nuevomodulo.estado, nuevomodulo.estilo,  modulo_id,)
+                "UPDATE modulo SET nombre = %s, descripcion = %s, ubicacion=%s, estilo = %s, estado = %s WHERE id = %s",
+                (nuevomodulo.nombre, nuevomodulo.descripcion, nuevomodulo.ubicacion,
+                 nuevomodulo.estilo, nuevomodulo.estado,  modulo_id,)
             )
             conn.commit()
 

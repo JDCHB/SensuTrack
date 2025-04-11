@@ -44,8 +44,8 @@ class AdminController():
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO modulo (nombre, descripcion, ubicacion, estilo, estado) VALUES (%s, %s, %s, %s, %s)",
-                           (nuevomodulo.nombre, nuevomodulo.descripcion, nuevomodulo.ubicacion, nuevomodulo.estilo, nuevomodulo.estado))
+            cursor.execute("INSERT INTO modulo (nombre, descripcion, ubicacion, estado, estilo) VALUES (%s, %s, %s, %s, %s)",
+                           (nuevomodulo.nombre, nuevomodulo.descripcion, nuevomodulo.ubicacion, nuevomodulo.estado, nuevomodulo.estilo))
             conn.commit()
             conn.close()
             return {"resultado": "Modulo creado"}
@@ -70,8 +70,8 @@ class AdminController():
                 'nombre': result[1],
                 'descripcion': result[2],
                 'ubicacion': result[3],
-                'estilo': str(result[4]),
-                'estado': bool(result[5]),
+                'estado': bool(result[4]),
+                'estilo': str(result[5]),
             }
             payload.append(content)
 
@@ -104,8 +104,8 @@ class AdminController():
                     'nombre': data[1],
                     'descripcion': data[2],
                     'ubicacion': data[3],
-                    'estilo': data[4],
-                    'estado': bool(data[5]),
+                    'estado': bool(data[4]),
+                    'estilo': data[5],
                 }
                 payload.append(content)
                 content = {}
@@ -127,9 +127,9 @@ class AdminController():
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(
-                "UPDATE modulo SET nombre = %s, descripcion = %s, ubicacion=%s, estilo = %s, estado = %s WHERE id = %s",
+                "UPDATE modulo SET nombre = %s, descripcion = %s, ubicacion=%s, estado = %s, estilo = %s WHERE id = %s",
                 (nuevomodulo.nombre, nuevomodulo.descripcion, nuevomodulo.ubicacion,
-                 nuevomodulo.estilo, nuevomodulo.estado,  modulo_id,)
+                 nuevomodulo.estado, nuevomodulo.estilo, modulo_id,)
             )
             conn.commit()
 

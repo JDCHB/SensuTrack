@@ -70,7 +70,7 @@ class AdminController():
                 'nombre': result[1],
                 'descripcion': result[2],
                 'ubicacion': result[3],
-                'estilo': result[4],
+                'estilo': str(result[4]),
                 'estado': bool(result[5]),
             }
             payload.append(content)

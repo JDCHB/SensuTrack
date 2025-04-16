@@ -365,9 +365,9 @@ class AdminController():
 
             conn.commit()  # Un solo commit al final para optimizar
 
-            if cursor.rowcount == 0:
-                raise HTTPException(
-                    status_code=404, detail="Módulo no encontrado")
+            # if cursor.rowcount == 0:
+            #     raise HTTPException(
+            #         status_code=404, detail="Módulo no encontrado")
 
             return {"mensaje": "Módulos actualizados exitosamente"}
 

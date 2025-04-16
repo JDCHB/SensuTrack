@@ -407,6 +407,43 @@ class CiegoController():
         finally:
             conn.close()
 
+            # VER TODOS LOS DISCAPACITADOS
+    def get_Genero_TipoCeguera_discapacitados(self):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""SELECT 
+                        g.genero AS genero,
+                        t.tp_ceguera AS tipo_ceguera,
+                        c.estado
+                        FROM ciegos c
+                        INNER JOIN genero_discapacitado g ON c.id_genero_discapacitado = g.id
+                        INNER JOIN tipo_ceguera t ON c.id_tipo_ceguera = t.id
+                        WHERE c.id = %s;
+                """)
+            result = cursor.fetchall()
+            payload = []
+            content = {}
+            for data in result:
+                content = {
+                    'genero': data[0],
+                    'tipo_ceguera': data[1],
+                    'estado': bool(data[2]),
+                }
+                payload.append(content)
+                content = {}
+            json_data = jsonable_encoder(payload)
+            if result:
+                return {"resultado": json_data}
+            else:
+                raise HTTPException(
+                    status_code=404, detail="Discapacitado not found")
+
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
     # ACTUALIZAR DISCAPACITADO
     def update_discapacitadoV(self, discapacitado_id: int, discapacitadov: DiscapacitadoV):
         try:

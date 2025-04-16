@@ -407,8 +407,9 @@ class CiegoController():
         finally:
             conn.close()
 
-            # VER TODOS LOS DISCAPACITADOS
-    def get_Genero_TipoCeguera_discapacitados(self):
+
+     # VER TODOS LOS DISCAPACITADOS
+    def get_Genero_TipoCeguera_discapacitados(self, discapacitado_id: int):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
@@ -420,7 +421,7 @@ class CiegoController():
                         INNER JOIN genero_discapacitado g ON c.id_genero_discapacitado = g.id
                         INNER JOIN tipo_ceguera t ON c.id_tipo_ceguera = t.id
                         WHERE c.id = %s;
-                """)
+                """, (discapacitado_id,))
             result = cursor.fetchall()
             payload = []
             content = {}

@@ -94,10 +94,15 @@ async def get_discapacitadosV_SIN_GPS():
     rpta = nuevo_discapacitado.get_discapacitadosV_SIN_GPS()
     return rpta
 
-@router.get("/get_Genero_TipoCeguera_discapacitados")
-async def get_Genero_TipoCeguera_discapacitados():
-    rpta = nuevo_discapacitado.get_Genero_TipoCeguera_discapacitados()
-    return rpta
+@router.get("/get_Genero_TipoCeguera_discapacitados/{discapacitado_id}")
+async def get_Genero_TipoCeguera_discapacitados(discapacitado_id: int):
+    try:
+        rpta = nuevo_discapacitado.get_Genero_TipoCeguera_discapacitados(discapacitado_id)
+        return rpta
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.put("/update_discapacitadoV/{discapacitado_id}")
 async def update_discapacitadoV(discapacitado_id: int, discapacitadov: DiscapacitadoV):

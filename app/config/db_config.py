@@ -1,14 +1,14 @@
 import mysql.connector
 
 
-"""
+
 def get_db_connection():
     return mysql.connector.connect(
         host="localhost",
         user="root",
         password="",
-        database="mascotas"
-    )"""
+        database="pruebasensu"
+    )
 
 # MASCOTAS
 
@@ -22,11 +22,11 @@ def get_db_connection():
 
 # SENSUTRACK
 
-def get_db_connection():
-    return mysql.connector.connect(
-        host="bgocf4tbcqh0beqp6kxh-mysql.services.clever-cloud.com",
-        user="ufctkasbdqpddbkd",
-        password="IkJrUL3YkcOrZpqjq347",
-        database="bgocf4tbcqh0beqp6kxh"
-    )
+# def get_db_connection():
+#     return mysql.connector.connect(
+#         host="bgocf4tbcqh0beqp6kxh-mysql.services.clever-cloud.com",
+#         user="ufctkasbdqpddbkd",
+#         password="IkJrUL3YkcOrZpqjq347",
+#         database="bgocf4tbcqh0beqp6kxh"
+#     )
 

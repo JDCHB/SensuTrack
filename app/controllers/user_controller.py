@@ -205,6 +205,11 @@ class Usercontroller():
 
     # CREAR USUARIO
     def create_user(self, user: User):
+        es_email_valido = lambda email: "@" in email and "." in email
+
+        if not es_email_valido(user.email):
+            return {"error": "El correo electrónico no es válido"}
+
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
@@ -213,17 +218,18 @@ class Usercontroller():
 
             if result:
                 return {"resultado": "El usuario ya existe"}
-            else:   
+            else:
                 cursor.execute("INSERT INTO usuarios (email,password,nombre,apellido,documento,telefono,id_rol,estado) VALUES (%s, %s, %s, %s, %s, %s ,%s ,%s)",
                             (user.email, user.password, user.nombre, user.apellido, user.documento, user.telefono, user.id_rol, user.estado))
                 conn.commit()
-                return {"resultado": "Usuario creado"}
+                return {"resultado": "Usuario creado correctamente"}
         except mysql.connector.Error as err:
             conn.rollback()
             return {"error": f"Error al crear usuario: {err}"}
         finally:
             if conn:
                 conn.close()
+
 
     # BUSCAR USUARIO
     def get_user(self, user_id: int):

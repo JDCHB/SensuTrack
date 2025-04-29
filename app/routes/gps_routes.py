@@ -79,3 +79,13 @@ async def get_GPS_Discapacitado(gps_id: int):
 async def get_Serial_GPS(serial: get_serial_bateria_GPS):
     rpta = nueva_unidad_gps.get_Serial_GPS(serial)
     return rpta
+
+@router.put("/update_coordenadas_discapacitado/{discapacitado_id}")
+async def update_coordenadas_discapacitado(discapacitado_id: int, coord: CoordenadaDiscapacitado):
+    try:
+        rpta = nueva_unidad_gps.update_coordenadas_discapacitado(discapacitado_id, coord)
+        return rpta
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

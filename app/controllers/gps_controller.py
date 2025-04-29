@@ -247,4 +247,27 @@ class GPScontroller():
         finally:
             conn.close()
 
+    def update_coordenadas_discapacitado(self, discapacitado_id: int, coord: CoordenadaDiscapacitado):
+            try:
+                conn = get_db_connection()
+                cursor = conn.cursor()
+                cursor.execute(
+                    "UPDATE coordenada SET latitud = %s, longitud = %s WHERE id = %s",
+                    (coord.estado, discapacitado_id,)
+                )
+                conn.commit()
+
+                if cursor.rowcount == 0:
+                    raise HTTPException(
+                        status_code=404, detail="Discapacitado no encontrado")
+
+                return {"mensaje": "Coordenada del Discapacitado actualizada exitosamente"}
+
+            except mysql.connector.Error as err:
+                raise HTTPException(status_code=500, detail=str(err))
+
+            finally:
+                if conn:
+                    conn.close()
+
     # FIN COLLARGPS

@@ -253,7 +253,7 @@ class GPScontroller():
                 cursor = conn.cursor()
                 cursor.execute(
                     "UPDATE coordenada SET latitud = %s, longitud = %s WHERE id = %s",
-                    (coord.estado, discapacitado_id,)
+                    (coord.latitud, coord.longitud, discapacitado_id,)
                 )
                 conn.commit()
 

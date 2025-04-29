@@ -55,7 +55,7 @@ class CiegoController():
                 return {"resultado": json_data}
             else:
                 raise HTTPException(
-                    status_code=404, detail="El Discapacitado no ha sido encontrado para el usuario"
+                    status_code=404, detail="El usuario no tiene discapacitados"
                 )
 
         except mysql.connector.Error as err:

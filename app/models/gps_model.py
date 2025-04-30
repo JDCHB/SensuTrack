@@ -22,5 +22,5 @@ class get_serial_bateria_GPS(BaseModel):
     documento: str
 
 class CoordenadaDiscapacitado(BaseModel):
-    latitud: str
-    longitud: str
+    latitud: float
+    longitud: float
